@@ -1,0 +1,4 @@
+/* Gaya tambahan sementara (Anggota C boleh mengganti seluruh isinya). */
+.menu-thumb { width: 56px; height: 56px; object-fit: cover; border-radius: .5rem; }
+.menu-preview { width: 160px; height: 160px; object-fit: cover; border-radius: .75rem; }
+.auth-card { max-width: 440px; margin: 2rem auto; }

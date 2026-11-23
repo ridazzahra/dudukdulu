@@ -1,0 +1,11 @@
+target/
+uploads/
+src/main/resources/db.properties
+.env
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
+*.log

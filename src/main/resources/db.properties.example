@@ -1,0 +1,8 @@
+# Salin file ini menjadi db.properties (sudah ada di .gitignore, JANGAN di-commit).
+# Nilai di sini dikalahkan oleh environment variable DB_URL / DB_USER / DB_PASSWORD / UPLOAD_DIR
+# (dipakai saat deploy ke hosting).
+db.url=jdbc:mysql://localhost:3306/food_order?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Jakarta&characterEncoding=UTF-8
+db.user=root
+db.password=
+# Folder penyimpanan gambar upload (di luar folder webapp agar tidak hilang saat redeploy)
+upload.dir=./uploads

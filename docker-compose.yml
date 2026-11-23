@@ -1,0 +1,38 @@
+# Jalankan seluruh aplikasi + MySQL untuk development:  docker compose up --build
+# Buka http://localhost:8080  (akun demo ada di README)
+services:
+  db:
+    image: mysql:8.0
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: food_order
+    volumes:
+      - dbdata:/var/lib/mysql
+      - ./database/01_schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+      - ./database/02_seed.sql:/docker-entrypoint-initdb.d/02_seed.sql:ro
+    healthcheck:
+      # lewat TCP (-h 127.0.0.1) agar baru "sehat" setelah proses init + seed selesai
+      test: ["CMD-SHELL", "mysql -h 127.0.0.1 -uroot -prootpass -e 'SELECT 1 FROM food_order.reviews LIMIT 1' || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  app:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_URL: "jdbc:mysql://db:3306/food_order?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Jakarta&characterEncoding=UTF-8"
+      DB_USER: root
+      DB_PASSWORD: rootpass
+      UPLOAD_DIR: /data/uploads
+    ports:
+      - "8080:8080"
+    volumes:
+      - uploads:/data/uploads
+
+volumes:
+  dbdata:
+  uploads:
