@@ -1,8 +1,8 @@
-# DudukDulu — aplikasi pemesanan makanan kafe (JSP) — EF234301 Web Programming, Quiz 2
+# DudukDulu — aplikasi pemesanan makanan kafe (JSP) 
 
 Aplikasi pemesanan makanan untuk kafe. Lanjutan proyek midterm (Laravel) yang ditulis ulang dengan
 **Jakarta Servlet + JSP + JSTL**, MySQL (JDBC + DAO), BCrypt, dan Servlet Filter.
-Repo: https://github.com/ridazzahra/dudukdulu · Proyek midterm (Laravel): _isi tautan repo lama di sini_.
+Repo: https://github.com/ridazzahra/dudukdulu · 
 
 ## Teknologi
 Java 17 · Jakarta Servlet 6 / JSP · JSTL 2.0 · Apache Tomcat **10.1** · Maven · MySQL 8 · jBCrypt · Bootstrap 5 (CDN)
@@ -35,19 +35,9 @@ Database `food_order` otomatis dibuat dari `database/01_schema.sql` + `database/
 ## Akun demo
 | Role | Email | Password |
 |---|---|---|
-| Admin | admin@foodorder.test | admin123 |
-| Customer | budi@foodorder.test | customer123 |
-| Customer | sari@foodorder.test | customer123 |
-| Nonaktif (uji fitur nonaktifkan) | tono@foodorder.test | customer123 |
-
-## Deploy ke hosting (catatan Anggota A)
-Hosting Java gratis terbatas. Cara paling realistis: deploy **Dockerfile** ini ke platform yang menerima Docker
-(mis. Render "Web Service" tipe Docker). Hal yang sudah dicek di dokumentasi resmi Render (docs.render.com/free):
-- instance gratis tidur setelah 15 menit tanpa trafik (request pertama setelahnya lambat sampai ~1 menit);
-- database gratis Render hanya PostgreSQL/Redis, **bukan MySQL** -> MySQL harus dari penyedia lain (cari yang gratis dan tes koneksinya);
-- filesystem sementara: gambar upload hilang saat restart. Untuk demo, unggah ulang gambar sebelum presentasi, atau pakai gambar default.
-- Tomcat memakai port 8080: set environment variable `PORT=8080` bila platform mewajibkan.
-Set `DB_URL`, `DB_USER`, `DB_PASSWORD` di dashboard platform (bukan di repo). Siapkan video demo sebagai cadangan.
+| Admin | admin@dudukdulu.test | admin123 |
+| Customer | customer@dudukdulu.test | customer123 |
+| Nonaktif (uji fitur nonaktifkan) | penyusup@dudukdulu.test | customer123 |
 
 ## Struktur
 ```

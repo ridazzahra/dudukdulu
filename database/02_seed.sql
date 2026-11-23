@@ -3,10 +3,9 @@
 -- Jalankan SETELAH 01_schema.sql.
 --
 -- AKUN DEMO (tulis di README):
---   admin     : admin@foodorder.test      / admin123
---   customer  : budi@foodorder.test       / customer123
---   customer  : sari@foodorder.test       / customer123
---   nonaktif  : tono@foodorder.test       / customer123  (is_active = 0, untuk uji fitur nonaktifkan)
+--   admin     : admin@dudukdulu.test      / admin123
+--   customer  : customer@dudukdulu.test   / customer123
+--   nonaktif  : penyusup@dudukdulu.test   / customer123  (is_active = 0, untuk uji fitur nonaktifkan)
 -- Hash di bawah berawalan $2a$ sehingga kompatibel dengan jBCrypt.
 -- =====================================================================
 
@@ -16,10 +15,9 @@ USE food_order;
 -- users
 -- ---------------------------------------------------------------------
 INSERT INTO users (id, name, email, password, role, phone, is_active) VALUES
-(1, 'Admin Resto',  'admin@foodorder.test', '$2a$10$cahVK5KNu5TBjIS5/hveY.fQ7laRNOc.ZR8883jQYoGPBNGJch1mC', 'admin',    '081200000001', 1),
-(2, 'Budi Santoso', 'budi@foodorder.test',  '$2a$10$Xt.AXLKi2IzWd4g2Os3v5ud1kYlQd3n6ssszZSaL2Ys0wxjEjQQYe', 'customer', '081200000002', 1),
-(3, 'Sari Wulandari','sari@foodorder.test', '$2a$10$Xt.AXLKi2IzWd4g2Os3v5ud1kYlQd3n6ssszZSaL2Ys0wxjEjQQYe', 'customer', '081200000003', 1),
-(4, 'Tono Nonaktif', 'tono@foodorder.test',  '$2a$10$Xt.AXLKi2IzWd4g2Os3v5ud1kYlQd3n6ssszZSaL2Ys0wxjEjQQYe', 'customer', '081200000004', 0);
+(1, 'Admin DudukDulu',   'admin@dudukdulu.test',     '$2a$10$cahVK5KNu5TBjIS5/hveY.fQ7laRNOc.ZR8883jQYoGPBNGJch1mC', 'admin',    '081200000001', 1),
+(2, 'Customer Demo',     'customer@dudukdulu.test',  '$2a$10$Xt.AXLKi2IzWd4g2Os3v5ud1kYlQd3n6ssszZSaL2Ys0wxjEjQQYe', 'customer', '081200000002', 1),
+(3, 'Penyusup Nonaktif', 'penyusup@dudukdulu.test',  '$2a$10$Xt.AXLKi2IzWd4g2Os3v5ud1kYlQd3n6ssszZSaL2Ys0wxjEjQQYe', 'customer', '081200000004', 0);
 
 -- ---------------------------------------------------------------------
 -- categories
@@ -88,8 +86,8 @@ INSERT INTO payment_methods (id, name, type, note, is_active) VALUES
 -- carts (keranjang aktif customer)
 -- ---------------------------------------------------------------------
 INSERT INTO carts (id, user_id, menu_id, quantity) VALUES
-(1, 3, 8, 2),
-(2, 3, 5, 1),
+(1, 2, 8, 2),
+(2, 2, 5, 1),
 (3, 2, 10, 1);
 
 -- ---------------------------------------------------------------------
@@ -98,11 +96,11 @@ INSERT INTO carts (id, user_id, menu_id, quantity) VALUES
 -- ---------------------------------------------------------------------
 INSERT INTO orders (id, user_id, table_id, total_price, status, note, created_at, updated_at, completed_at) VALUES
 (1, 2, 3, 62000.00, 'completed',  'Tidak pedas.',            '2026-11-20 12:15:00', '2026-11-20 12:50:00', '2026-11-20 12:50:00'),
-(2, 3, 5, 60000.00, 'completed',  '',                        '2026-11-21 18:30:00', '2026-11-21 19:10:00', '2026-11-21 19:10:00'),
+(2, 2, 5, 60000.00, 'completed',  '',                        '2026-11-21 18:30:00', '2026-11-21 19:10:00', '2026-11-21 19:10:00'),
 (3, 2, 1, 72000.00, 'processing', 'Sambal dipisah.',         '2026-11-23 09:40:00', '2026-11-23 09:45:00', NULL),
-(4, 3, 7, 40000.00, 'pending',    '',                        '2026-11-23 10:05:00', '2026-11-23 10:05:00', NULL),
+(4, 2, 7, 40000.00, 'pending',    '',                        '2026-11-23 10:05:00', '2026-11-23 10:05:00', NULL),
 (5, 2, 4, 28000.00, 'cancelled',  'Dibatalkan oleh admin.',  '2026-11-22 13:00:00', '2026-11-22 13:20:00', NULL),
-(6, 3, 2, 37000.00, 'ready',      'Es krim jangan dulu.',    '2026-11-23 10:20:00', '2026-11-23 10:35:00', NULL);
+(6, 2, 2, 37000.00, 'ready',      'Es krim jangan dulu.',    '2026-11-23 10:20:00', '2026-11-23 10:35:00', NULL);
 
 -- ---------------------------------------------------------------------
 -- order_items (price = snapshot harga saat checkout)
@@ -145,4 +143,4 @@ INSERT INTO payments (id, order_id, payment_method_id, amount, status, paid_at, 
 -- ---------------------------------------------------------------------
 INSERT INTO reviews (id, user_id, order_id, rating, comment, created_at) VALUES
 (1, 2, 1, 5.0, 'Nasi gorengnya enak, pelayanan cepat.',         '2026-11-20 13:10:00'),
-(2, 3, 2, 4.0, 'Ayam bakarnya enak, tapi agak lama datangnya.', '2026-11-21 19:30:00');
+(2, 2, 2, 4.0, 'Ayam bakarnya enak, tapi agak lama datangnya.', '2026-11-21 19:30:00');
