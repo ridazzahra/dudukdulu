@@ -70,9 +70,9 @@ public final class OrderStatus {
             return null;
         }
         return switch (n) {
-            case PROCESSING -> "Proses Order";
-            case READY -> "Tandai Siap";
-            case COMPLETED -> "Selesaikan";
+            case PROCESSING -> "Process Order";
+            case READY -> "Mark Ready";
+            case COMPLETED -> "Complete";
             default -> label(n);
         };
     }
