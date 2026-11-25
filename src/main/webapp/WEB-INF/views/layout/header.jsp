@@ -1,7 +1,7 @@
-<%-- LAYOUT SEMENTARA dari Anggota A agar semua halaman bisa dites. Anggota C boleh menimpa file ini
-     (header.jsp / footer.jsp) selama kontrak tetap: variabel ${pageTitle}, ${flashSuccess}, ${flashError}. --%>
+<%-- TEMPORARY LAYOUT from Member A so every page can be tested. Member C may overwrite this file
+     (header.jsp / footer.jsp) as long as the contract stays: variables ${pageTitle}, ${flashSuccess}, ${flashError}. --%>
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -20,18 +20,18 @@
     <div class="collapse navbar-collapse" id="mainNav">
       <ul class="navbar-nav me-auto">
         <c:if test="${not empty sessionScope.authUser and sessionScope.authUser.admin}">
-          <li class="nav-item"><a class="nav-link" href="${ctx}/admin/categories">Kategori</a></li>
+          <li class="nav-item"><a class="nav-link" href="${ctx}/admin/categories">Categories</a></li>
           <li class="nav-item"><a class="nav-link" href="${ctx}/admin/menus">Menu</a></li>
-          <li class="nav-item"><a class="nav-link" href="${ctx}/admin/tables">Meja</a></li>
-          <li class="nav-item"><a class="nav-link" href="${ctx}/admin/payment-methods">Pembayaran</a></li>
-          <li class="nav-item"><a class="nav-link" href="${ctx}/admin/orders">Order</a></li>
-          <li class="nav-item"><a class="nav-link" href="${ctx}/admin/users">User</a></li>
-          <li class="nav-item"><a class="nav-link" href="${ctx}/admin/reviews">Review</a></li>
+          <li class="nav-item"><a class="nav-link" href="${ctx}/admin/tables">Tables</a></li>
+          <li class="nav-item"><a class="nav-link" href="${ctx}/admin/payment-methods">Payments</a></li>
+          <li class="nav-item"><a class="nav-link" href="${ctx}/admin/orders">Orders</a></li>
+          <li class="nav-item"><a class="nav-link" href="${ctx}/admin/users">Users</a></li>
+          <li class="nav-item"><a class="nav-link" href="${ctx}/admin/reviews">Reviews</a></li>
         </c:if>
         <c:if test="${not empty sessionScope.authUser and not sessionScope.authUser.admin}">
-          <li class="nav-item"><a class="nav-link" href="${ctx}/catalog">Katalog</a></li>
-          <li class="nav-item"><a class="nav-link" href="${ctx}/cart">Keranjang</a></li>
-          <li class="nav-item"><a class="nav-link" href="${ctx}/orders">Pesanan</a></li>
+          <li class="nav-item"><a class="nav-link" href="${ctx}/catalog">Catalog</a></li>
+          <li class="nav-item"><a class="nav-link" href="${ctx}/cart">Cart</a></li>
+          <li class="nav-item"><a class="nav-link" href="${ctx}/orders">My Orders</a></li>
         </c:if>
       </ul>
       <div class="d-flex align-items-center gap-2">
@@ -44,7 +44,7 @@
           </c:when>
           <c:otherwise>
             <a class="btn btn-outline-light btn-sm" href="${ctx}/login">Login</a>
-            <a class="btn btn-light btn-sm" href="${ctx}/register">Daftar</a>
+            <a class="btn btn-light btn-sm" href="${ctx}/register">Register</a>
           </c:otherwise>
         </c:choose>
       </div>
@@ -55,12 +55,12 @@
 <c:if test="${not empty flashSuccess}">
   <div class="alert alert-success alert-dismissible fade show" role="alert">
     <c:out value="${flashSuccess}"/>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
 </c:if>
 <c:if test="${not empty flashError}">
   <div class="alert alert-danger alert-dismissible fade show" role="alert">
     <c:out value="${flashError}"/>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
 </c:if>

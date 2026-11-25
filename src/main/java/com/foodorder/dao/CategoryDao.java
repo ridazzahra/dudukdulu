@@ -14,12 +14,11 @@ import java.util.List;
 
 public class CategoryDao {
 
-    /** Semua kategori (untuk dropdown), urut nama. */
     public List<Category> findAll() throws SQLException {
         List<Category> list = new ArrayList<>();
         try (Connection c = DbUtil.getConnection();
-             PreparedStatement ps = c.prepareStatement("SELECT id, name FROM categories ORDER BY name");
-             ResultSet rs = ps.executeQuery()) {
+            PreparedStatement ps = c.prepareStatement("SELECT id, name FROM categories ORDER BY name");
+            ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 Category cat = new Category();
                 cat.setId(rs.getInt("id"));
@@ -30,7 +29,6 @@ public class CategoryDao {
         return list;
     }
 
-    /** Daftar berhalaman + pencarian nama, lengkap dengan jumlah menu per kategori. */
     public Page<Category> findAll(String q, int page, int size) throws SQLException {
         String like = Sql.like(q);
         try (Connection c = DbUtil.getConnection()) {
@@ -67,7 +65,7 @@ public class CategoryDao {
 
     public Category findById(int id) throws SQLException {
         try (Connection c = DbUtil.getConnection();
-             PreparedStatement ps = c.prepareStatement("SELECT id, name FROM categories WHERE id = ?")) {
+            PreparedStatement ps = c.prepareStatement("SELECT id, name FROM categories WHERE id = ?")) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (!rs.next()) {
@@ -84,7 +82,7 @@ public class CategoryDao {
     public int create(Category cat) throws SQLException {
         try (Connection c = DbUtil.getConnection();
              PreparedStatement ps = c.prepareStatement("INSERT INTO categories (name) VALUES (?)",
-                     Statement.RETURN_GENERATED_KEYS)) {
+                    Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, cat.getName());
             ps.executeUpdate();
             try (ResultSet keys = ps.getGeneratedKeys()) {
@@ -95,26 +93,24 @@ public class CategoryDao {
 
     public boolean update(Category cat) throws SQLException {
         try (Connection c = DbUtil.getConnection();
-             PreparedStatement ps = c.prepareStatement("UPDATE categories SET name = ? WHERE id = ?")) {
+            PreparedStatement ps = c.prepareStatement("UPDATE categories SET name = ? WHERE id = ?")) {
             ps.setString(1, cat.getName());
             ps.setInt(2, cat.getId());
             return ps.executeUpdate() > 0;
         }
     }
 
-    /** Melempar SQLIntegrityConstraintViolationException bila masih dipakai menu (FK RESTRICT). */
     public boolean delete(int id) throws SQLException {
         try (Connection c = DbUtil.getConnection();
-             PreparedStatement ps = c.prepareStatement("DELETE FROM categories WHERE id = ?")) {
+            PreparedStatement ps = c.prepareStatement("DELETE FROM categories WHERE id = ?")) {
             ps.setInt(1, id);
             return ps.executeUpdate() > 0;
         }
     }
 
-    /** excludeId = 0 saat membuat baru; id kategori itu sendiri saat mengubah. */
     public boolean existsByName(String name, int excludeId) throws SQLException {
         try (Connection c = DbUtil.getConnection();
-             PreparedStatement ps = c.prepareStatement("SELECT 1 FROM categories WHERE name = ? AND id <> ?")) {
+            PreparedStatement ps = c.prepareStatement("SELECT 1 FROM categories WHERE name = ? AND id <> ?")) {
             ps.setString(1, name);
             ps.setInt(2, excludeId);
             try (ResultSet rs = ps.executeQuery()) {
@@ -125,7 +121,7 @@ public class CategoryDao {
 
     public int countMenus(int id) throws SQLException {
         try (Connection c = DbUtil.getConnection();
-             PreparedStatement ps = c.prepareStatement("SELECT COUNT(*) FROM menus WHERE category_id = ?")) {
+            PreparedStatement ps = c.prepareStatement("SELECT COUNT(*) FROM menus WHERE category_id = ?")) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 rs.next();

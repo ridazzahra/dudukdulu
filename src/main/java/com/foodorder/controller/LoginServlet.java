@@ -35,21 +35,20 @@ public class LoginServlet extends BaseServlet {
         req.setAttribute("email", email);
 
         if (email.isEmpty() || password.isEmpty()) {
-            Flash.errorNow(req, "Email dan password wajib diisi.");
+            Flash.errorNow(req, "Email and password are required.");
             forward(req, resp, "auth/login");
             return;
         }
 
         try {
             User user = userDao.findByEmail(email);
-            // pesan sama untuk email tak terdaftar & password salah (tidak membocorkan email mana yang ada)
             if (user == null || !PasswordUtil.verify(password, user.getPassword())) {
-                Flash.errorNow(req, "Email atau password salah.");
+                Flash.errorNow(req, "Invalid email or password.");
                 forward(req, resp, "auth/login");
                 return;
             }
             if (!user.isActive()) {
-                Flash.errorNow(req, "Akun Anda dinonaktifkan. Hubungi admin.");
+                Flash.errorNow(req, "Your account has been deactivated. Please contact the admin.");
                 forward(req, resp, "auth/login");
                 return;
             }
@@ -59,10 +58,9 @@ public class LoginServlet extends BaseServlet {
             Auth.login(req, user);
             req.getSession().removeAttribute(Auth.AFTER_LOGIN_KEY);
 
-            // hanya path internal yang boleh dipakai sebagai tujuan (cegah open redirect)
             boolean safeTarget = target != null && target.startsWith("/") && !target.startsWith("//")
                     && !target.contains("\\");
-            Flash.success(req, "Selamat datang, " + user.getName() + "!");
+            Flash.success(req, "Welcome, " + user.getName() + "!");
             redirect(req, resp, safeTarget ? target : Auth.homeFor(user));
         } catch (SQLException e) {
             throw new ServletException(e);

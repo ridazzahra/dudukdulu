@@ -18,11 +18,6 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 
-/**
- * CRUD menu (admin) + upload gambar + toggle tersedia/sold out.
- * GET  /admin/menus  (?q=&category=&availability=1|0&sort=name|price_asc|price_desc|newest&page=)
- * GET/POST /admin/menus/create, GET/POST /admin/menus/edit(?id=), POST /admin/menus/delete, POST /admin/menus/toggle
- */
 @WebServlet("/admin/menus/*")
 @MultipartConfig(maxFileSize = 2 * 1024 * 1024, maxRequestSize = 3 * 1024 * 1024, fileSizeThreshold = 512 * 1024)
 public class MenuServlet extends BaseServlet {
@@ -68,8 +63,8 @@ public class MenuServlet extends BaseServlet {
             }
         } catch (SQLException e) {
             throw new ServletException(e);
-        } catch (IllegalStateException tooBig) { // file/permintaan melebihi batas @MultipartConfig
-            Flash.error(req, "Upload gagal: ukuran gambar maksimal 2 MB.");
+        } catch (IllegalStateException tooBig) {
+            Flash.error(req, "Upload failed: maximum image size is 2 MB.");
             redirect(req, resp, "/admin/menus");
         }
     }
@@ -123,15 +118,15 @@ public class MenuServlet extends BaseServlet {
         m.setPrice(price);
 
         Validator v = new Validator()
-                .required("name", m.getName(), "Nama menu").maxLength("name", m.getName(), 255, "Nama menu")
-                .maxLength("description", m.getDescription(), 255, "Deskripsi");
+                .required("name", m.getName(), "Menu name").maxLength("name", m.getName(), 255, "Menu name")
+                .maxLength("description", m.getDescription(), 255, "Description");
         if (categoryId == null || categoryDao.findById(categoryId) == null) {
-            v.error("categoryId", "Pilih kategori yang valid.");
+            v.error("categoryId", "Please select a valid category.");
         }
         if (priceRaw.isEmpty()) {
-            v.error("price", "Harga wajib diisi.");
+            v.error("price", "Price is required.");
         } else if (price == null) {
-            v.error("price", "Harga harus angka (maksimal 2 desimal), tanpa tanda pemisah ribuan.");
+            v.error("price", "Price must be a number (up to 2 decimal places), without thousands separators.");
         }
 
         Part image = getImagePart(req);
@@ -162,18 +157,17 @@ public class MenuServlet extends BaseServlet {
             }
         } catch (SQLException e) {
             if (newImage != null) {
-                ImageUploader.delete(newImage); // batalkan file yang sudah terlanjur disimpan
+                ImageUploader.delete(newImage); 
             }
             throw e;
         }
         if (newImage != null && !isNew) {
-            ImageUploader.delete(oldImage); // gambar lama tidak terpakai lagi
+            ImageUploader.delete(oldImage); 
         }
-        Flash.success(req, "Menu \"" + m.getName() + "\" berhasil " + (isNew ? "ditambahkan." : "diperbarui."));
+        Flash.success(req, "Menu \"" + m.getName() + "\" has been " + (isNew ? "added." : "updated."));
         redirect(req, resp, "/admin/menus");
     }
 
-    /** Part gambar bila benar-benar ada file; null bila kosong. */
     private Part getImagePart(HttpServletRequest req) throws IOException, ServletException {
         Part p = req.getPart("image");
         return ImageUploader.hasFile(p) ? p : null;
@@ -182,10 +176,10 @@ public class MenuServlet extends BaseServlet {
     private void toggle(HttpServletRequest req, HttpServletResponse resp) throws SQLException, IOException {
         Menu m = dao.findById(intParam(req, "id", 0));
         if (m == null) {
-            Flash.error(req, "Menu tidak ditemukan.");
+            Flash.error(req, "Menu item not found.");
         } else {
             dao.toggleAvailability(m.getId());
-            Flash.success(req, "\"" + m.getName() + "\" sekarang " + (m.isAvailable() ? "sold out." : "tersedia."));
+            Flash.success(req, "\"" + m.getName() + "\" is now " + (m.isAvailable() ? "sold out." : "available."));
         }
         String back = safeQuery(req.getParameter("back"));
         redirect(req, resp, "/admin/menus" + (back.isEmpty() ? "" : "?" + back));
@@ -194,19 +188,19 @@ public class MenuServlet extends BaseServlet {
     private void delete(HttpServletRequest req, HttpServletResponse resp) throws SQLException, IOException {
         Menu m = dao.findById(intParam(req, "id", 0));
         if (m == null) {
-            Flash.error(req, "Menu tidak ditemukan.");
+            Flash.error(req, "Menu item not found.");
         } else {
             int used = dao.countInOrders(m.getId());
             if (used > 0) {
-                Flash.error(req, "Menu \"" + m.getName() + "\" sudah ada di " + used
-                        + " item order sehingga tidak bisa dihapus. Tandai sold out saja.");
+                Flash.error(req, "Menu \"" + m.getName() + "\" is already in " + used
+                        + " order items, so it cannot be deleted. Mark it as sold out instead.");
             } else {
                 try {
                     dao.delete(m.getId());
                     ImageUploader.delete(m.getImageLink());
-                    Flash.success(req, "Menu \"" + m.getName() + "\" berhasil dihapus.");
+                    Flash.success(req, "Menu \"" + m.getName() + "\" has been deleted.");
                 } catch (SQLIntegrityConstraintViolationException e) {
-                    Flash.error(req, "Menu masih dipakai data lain sehingga tidak bisa dihapus. Tandai sold out saja.");
+                    Flash.error(req, "Menu item is still used by other data and cannot be deleted. Mark it as sold out instead.");
                 }
             }
         }
@@ -214,7 +208,7 @@ public class MenuServlet extends BaseServlet {
     }
 
     private void notFound(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Flash.error(req, "Menu tidak ditemukan.");
+        Flash.error(req, "Menu item not found.");
         redirect(req, resp, "/admin/menus");
     }
 }

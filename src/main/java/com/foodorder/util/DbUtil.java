@@ -9,16 +9,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-/**
- * Koneksi database (JDBC). Prioritas konfigurasi:
- * 1) environment variable (DB_URL, DB_USER, DB_PASSWORD, UPLOAD_DIR) -> dipakai di hosting/Docker
- * 2) file db.properties di classpath (src/main/resources, TIDAK di-commit)
- * 3) nilai default untuk MySQL lokal.
- *
- * Pemakaian di DAO:
- *   try (Connection c = DbUtil.getConnection(); PreparedStatement ps = c.prepareStatement(sql)) { ... }
- * Untuk transaksi (Anggota B): c.setAutoCommit(false); ... c.commit(); / c.rollback();
- */
 public final class DbUtil {
 
     private static final Properties PROPS = new Properties();
@@ -63,7 +53,6 @@ public final class DbUtil {
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 
-    /** Folder tempat gambar upload disimpan (di luar webapp). */
     public static Path getUploadDir() {
         return UPLOAD_DIR;
     }

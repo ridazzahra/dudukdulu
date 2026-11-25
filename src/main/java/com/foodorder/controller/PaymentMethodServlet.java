@@ -13,10 +13,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 
-/**
- * CRUD metode pembayaran (admin).
- * URL: /admin/payment-methods, /create, /edit?id=, POST /delete, POST /toggle (aktif/nonaktif)
- */
 @WebServlet("/admin/payment-methods/*")
 public class PaymentMethodServlet extends BaseServlet {
 
@@ -87,13 +83,13 @@ public class PaymentMethodServlet extends BaseServlet {
         m.setActive(req.getParameter("active") != null);
 
         Validator v = new Validator()
-                .required("name", m.getName(), "Nama metode").maxLength("name", m.getName(), 50, "Nama metode")
-                .maxLength("note", m.getNote(), 255, "Instruksi");
+                .required("name", m.getName(), "Method name").maxLength("name", m.getName(), 50, "Method name")
+                .maxLength("note", m.getNote(), 255, "Instructions");
         if (!PaymentMethod.TYPES.containsKey(m.getType())) {
-            v.error("type", "Jenis pembayaran tidak valid.");
+            v.error("type", "Invalid payment type.");
         }
         if (!v.getErrors().containsKey("name") && dao.existsByName(m.getName(), id)) {
-            v.error("name", "Nama metode sudah dipakai.");
+            v.error("name", "This method name is already in use.");
         }
         if (v.hasErrors()) {
             showFormWithErrors(req, resp, m, v);
@@ -106,11 +102,11 @@ public class PaymentMethodServlet extends BaseServlet {
                 dao.update(m);
             }
         } catch (SQLIntegrityConstraintViolationException dup) {
-            v.error("name", "Nama metode sudah dipakai.");
+            v.error("name", "This method name is already in use.");
             showFormWithErrors(req, resp, m, v);
             return;
         }
-        Flash.success(req, "Metode pembayaran \"" + m.getName() + "\" berhasil " + (isNew ? "ditambahkan." : "diperbarui."));
+        Flash.success(req, "Payment method \"" + m.getName() + "\" was " + (isNew ? "added." : "updated."));
         redirect(req, resp, "/admin/payment-methods");
     }
 
@@ -125,10 +121,10 @@ public class PaymentMethodServlet extends BaseServlet {
     private void toggle(HttpServletRequest req, HttpServletResponse resp) throws SQLException, IOException {
         PaymentMethod m = dao.findById(intParam(req, "id", 0));
         if (m == null) {
-            Flash.error(req, "Metode pembayaran tidak ditemukan.");
+            Flash.error(req, "Payment method not found.");
         } else {
             dao.toggleActive(m.getId());
-            Flash.success(req, "\"" + m.getName() + "\" sekarang " + (m.isActive() ? "nonaktif." : "aktif."));
+            Flash.success(req, "\"" + m.getName() + "\" is now " + (m.isActive() ? "inactive." : "active."));
         }
         redirect(req, resp, "/admin/payment-methods" + backQuery(req));
     }
@@ -136,18 +132,18 @@ public class PaymentMethodServlet extends BaseServlet {
     private void delete(HttpServletRequest req, HttpServletResponse resp) throws SQLException, IOException {
         PaymentMethod m = dao.findById(intParam(req, "id", 0));
         if (m == null) {
-            Flash.error(req, "Metode pembayaran tidak ditemukan.");
+            Flash.error(req, "Payment method not found.");
         } else {
             int used = dao.countPayments(m.getId());
             if (used > 0) {
-                Flash.error(req, "\"" + m.getName() + "\" sudah dipakai " + used
-                        + " pembayaran sehingga tidak bisa dihapus. Nonaktifkan saja.");
+                Flash.error(req, "\"" + m.getName() + "\" is used by " + used
+                        + " payment(s), so it cannot be deleted. Deactivate it instead.");
             } else {
                 try {
                     dao.delete(m.getId());
-                    Flash.success(req, "Metode pembayaran \"" + m.getName() + "\" berhasil dihapus.");
+                    Flash.success(req, "Payment method \"" + m.getName() + "\" was deleted.");
                 } catch (SQLIntegrityConstraintViolationException e) {
-                    Flash.error(req, "Metode masih dipakai data lain sehingga tidak bisa dihapus. Nonaktifkan saja.");
+                    Flash.error(req, "This method is still used by other data, so it cannot be deleted. Deactivate it instead.");
                 }
             }
         }
@@ -160,7 +156,7 @@ public class PaymentMethodServlet extends BaseServlet {
     }
 
     private void notFound(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Flash.error(req, "Metode pembayaran tidak ditemukan.");
+        Flash.error(req, "Payment method not found.");
         redirect(req, resp, "/admin/payment-methods");
     }
 }

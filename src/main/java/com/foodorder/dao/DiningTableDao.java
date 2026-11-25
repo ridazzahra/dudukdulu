@@ -12,7 +12,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-/** DAO meja. Anggota B memakai findAvailable() dan updateStatus() di checkout / penyelesaian order. */
 public class DiningTableDao {
 
     private static final String COLS = "id, number, capacity, status";
@@ -26,12 +25,10 @@ public class DiningTableDao {
         return t;
     }
 
-    /** Semua meja urut nomor. */
     public List<DiningTable> findAll() throws SQLException {
         return list("SELECT " + COLS + " FROM dining_tables ORDER BY number");
     }
 
-    /** Hanya meja berstatus 'available' (untuk pilihan di checkout). */
     public List<DiningTable> findAvailable() throws SQLException {
         return list("SELECT " + COLS + " FROM dining_tables WHERE status = 'available' ORDER BY number");
     }
@@ -39,8 +36,8 @@ public class DiningTableDao {
     private List<DiningTable> list(String sql) throws SQLException {
         List<DiningTable> list = new ArrayList<>();
         try (Connection c = DbUtil.getConnection();
-             PreparedStatement ps = c.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+            PreparedStatement ps = c.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 list.add(map(rs));
             }
@@ -48,7 +45,6 @@ public class DiningTableDao {
         return list;
     }
 
-    /** Daftar berhalaman; q mencari nomor meja, status null/kosong = semua. */
     public Page<DiningTable> findAll(String q, String status, int page, int size) throws SQLException {
         StringBuilder where = new StringBuilder(" WHERE 1=1");
         List<Object> params = new ArrayList<>();
@@ -94,7 +90,7 @@ public class DiningTableDao {
 
     public DiningTable findById(int id) throws SQLException {
         try (Connection c = DbUtil.getConnection();
-             PreparedStatement ps = c.prepareStatement("SELECT " + COLS + " FROM dining_tables WHERE id = ?")) {
+            PreparedStatement ps = c.prepareStatement("SELECT " + COLS + " FROM dining_tables WHERE id = ?")) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 return rs.next() ? map(rs) : null;
@@ -104,9 +100,9 @@ public class DiningTableDao {
 
     public int create(DiningTable t) throws SQLException {
         try (Connection c = DbUtil.getConnection();
-             PreparedStatement ps = c.prepareStatement(
-                     "INSERT INTO dining_tables (number, capacity, status) VALUES (?, ?, ?)",
-                     Statement.RETURN_GENERATED_KEYS)) {
+            PreparedStatement ps = c.prepareStatement(
+                    "INSERT INTO dining_tables (number, capacity, status) VALUES (?, ?, ?)",
+                    Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, t.getNumber());
             ps.setInt(2, t.getCapacity());
             ps.setString(3, t.getStatus());
@@ -119,8 +115,8 @@ public class DiningTableDao {
 
     public boolean update(DiningTable t) throws SQLException {
         try (Connection c = DbUtil.getConnection();
-             PreparedStatement ps = c.prepareStatement(
-                     "UPDATE dining_tables SET number = ?, capacity = ?, status = ? WHERE id = ?")) {
+            PreparedStatement ps = c.prepareStatement(
+                    "UPDATE dining_tables SET number = ?, capacity = ?, status = ? WHERE id = ?")) {
             ps.setInt(1, t.getNumber());
             ps.setInt(2, t.getCapacity());
             ps.setString(3, t.getStatus());
@@ -129,19 +125,17 @@ public class DiningTableDao {
         }
     }
 
-    /** Melempar SQLIntegrityConstraintViolationException bila meja pernah dipakai order (FK RESTRICT). */
     public boolean delete(int id) throws SQLException {
         try (Connection c = DbUtil.getConnection();
-             PreparedStatement ps = c.prepareStatement("DELETE FROM dining_tables WHERE id = ?")) {
+            PreparedStatement ps = c.prepareStatement("DELETE FROM dining_tables WHERE id = ?")) {
             ps.setInt(1, id);
             return ps.executeUpdate() > 0;
         }
     }
 
-    /** Ubah status saja (Anggota B: 'occupied' saat order dibuat, 'available' saat selesai/batal). */
     public boolean updateStatus(int id, String status) throws SQLException {
         try (Connection c = DbUtil.getConnection();
-             PreparedStatement ps = c.prepareStatement("UPDATE dining_tables SET status = ? WHERE id = ?")) {
+            PreparedStatement ps = c.prepareStatement("UPDATE dining_tables SET status = ? WHERE id = ?")) {
             ps.setString(1, status);
             ps.setInt(2, id);
             return ps.executeUpdate() > 0;
@@ -150,7 +144,7 @@ public class DiningTableDao {
 
     public boolean existsNumber(int number, int excludeId) throws SQLException {
         try (Connection c = DbUtil.getConnection();
-             PreparedStatement ps = c.prepareStatement("SELECT 1 FROM dining_tables WHERE number = ? AND id <> ?")) {
+            PreparedStatement ps = c.prepareStatement("SELECT 1 FROM dining_tables WHERE number = ? AND id <> ?")) {
             ps.setInt(1, number);
             ps.setInt(2, excludeId);
             try (ResultSet rs = ps.executeQuery()) {
@@ -161,7 +155,7 @@ public class DiningTableDao {
 
     public int countOrders(int id) throws SQLException {
         try (Connection c = DbUtil.getConnection();
-             PreparedStatement ps = c.prepareStatement("SELECT COUNT(*) FROM orders WHERE table_id = ?")) {
+            PreparedStatement ps = c.prepareStatement("SELECT COUNT(*) FROM orders WHERE table_id = ?")) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 rs.next();

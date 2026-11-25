@@ -10,21 +10,17 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Set;
 
-/** Fungsi bantu bersama untuk semua servlet (dipakai juga oleh Anggota B & C). */
 public abstract class BaseServlet extends HttpServlet {
 
-    /** Forward ke JSP: forward(req, resp, "admin/menus/list") -> /WEB-INF/views/admin/menus/list.jsp */
     protected void forward(HttpServletRequest req, HttpServletResponse resp, String view)
             throws ServletException, IOException {
         req.getRequestDispatcher("/WEB-INF/views/" + view + ".jsp").forward(req, resp);
     }
 
-    /** Redirect ke path di dalam aplikasi (context path ditambahkan otomatis): redirect(req, resp, "/admin/menus"). */
     protected void redirect(HttpServletRequest req, HttpServletResponse resp, String path) throws IOException {
         resp.sendRedirect(req.getContextPath() + path);
     }
 
-    /** Sisa path setelah pola servlet ("" untuk daftar, "/create", "/edit", ...), tanpa garis miring penutup. */
     protected String action(HttpServletRequest req) {
         String p = req.getPathInfo();
         if (p == null || p.equals("/")) {
@@ -41,8 +37,6 @@ public abstract class BaseServlet extends HttpServlet {
             return defaultValue;
         }
     }
-
-    /** Query string (sudah di-encode) tanpa parameter tertentu, untuk tautan paginasi: "q=kopi&category=2". */
     protected String baseQuery(HttpServletRequest req, String... exclude) {
         Set<String> skip = Set.of(exclude);
         StringBuilder sb = new StringBuilder();
@@ -65,7 +59,6 @@ public abstract class BaseServlet extends HttpServlet {
         return sb.toString();
     }
 
-    /** Bersihkan query string kiriman form (hidden "back") sebelum dipakai di redirect. */
     protected String safeQuery(String q) {
         return q == null ? "" : q.replaceAll("[\\r\\n\\s]", "");
     }

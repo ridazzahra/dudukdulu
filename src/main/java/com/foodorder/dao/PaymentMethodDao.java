@@ -12,7 +12,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-/** DAO metode pembayaran. Anggota B memakai findAllActive() dan findById() di checkout. */
 public class PaymentMethodDao {
 
     private static final String COLS = "id, name, type, note, is_active";
@@ -27,7 +26,6 @@ public class PaymentMethodDao {
         return p;
     }
 
-    /** Hanya metode aktif (pilihan customer di checkout). */
     public List<PaymentMethod> findAllActive() throws SQLException {
         List<PaymentMethod> list = new ArrayList<>();
         try (Connection c = DbUtil.getConnection();
@@ -41,7 +39,6 @@ public class PaymentMethodDao {
         return list;
     }
 
-    /** Daftar admin berhalaman; q mencari nama. */
     public Page<PaymentMethod> findAll(String q, int page, int size) throws SQLException {
         String like = Sql.like(q);
         try (Connection c = DbUtil.getConnection()) {
@@ -109,7 +106,6 @@ public class PaymentMethodDao {
         }
     }
 
-    /** Melempar SQLIntegrityConstraintViolationException bila sudah dipakai payment (FK RESTRICT). */
     public boolean delete(int id) throws SQLException {
         try (Connection c = DbUtil.getConnection();
              PreparedStatement ps = c.prepareStatement("DELETE FROM payment_methods WHERE id = ?")) {

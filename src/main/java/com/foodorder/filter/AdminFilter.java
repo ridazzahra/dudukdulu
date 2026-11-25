@@ -10,7 +10,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/** Dipetakan ke /admin/* di web.xml (berjalan setelah AuthFilter): hanya role admin yang boleh lewat. */
 public class AdminFilter implements Filter {
 
     @Override

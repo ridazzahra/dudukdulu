@@ -6,9 +6,9 @@ import java.util.Map;
 public class PaymentMethod {
     public static final Map<String, String> TYPES = new LinkedHashMap<>();
     static {
-        TYPES.put("cash", "Tunai");
+        TYPES.put("cash", "Cash");
         TYPES.put("qris", "QRIS");
-        TYPES.put("transfer", "Transfer Bank");
+        TYPES.put("transfer", "Bank Transfer");
         TYPES.put("ewallet", "E-Wallet");
     }
 
