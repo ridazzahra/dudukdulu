@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/** Pintu masuk "/" (lewat index.jsp): arahkan ke halaman sesuai role, atau ke login. */
 @WebServlet("/home")
 public class HomeServlet extends BaseServlet {
 

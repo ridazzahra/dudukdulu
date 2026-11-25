@@ -1,19 +1,7 @@
--- =====================================================================
--- 03_migrate_from_laravel.sql  |  OPSIONAL
--- Dipakai HANYA jika ingin mengubah database Laravel yang SUDAH ADA
--- (dan mempertahankan datanya), bukan membuat database baru dari 01 + 02.
---
--- Asumsi skema lama (sesuai CDM lama): users, categories, menus, carts,
--- orders (dengan kolom table_number), order_items, reviews.
--- CEK DULU dengan DESCRIBE tiap tabel. BACKUP dulu: mysqldump food_order > backup.sql
--- Jalankan SEKALI saja. Ganti nama database jika berbeda.
--- =====================================================================
-
 USE food_order;
 
 START TRANSACTION;
 
--- 1. Tabel baru -------------------------------------------------------
 CREATE TABLE dining_tables (
   id        INT         NOT NULL AUTO_INCREMENT,
   number    INT         NOT NULL,
@@ -36,7 +24,6 @@ CREATE TABLE payment_methods (
   CONSTRAINT chk_pm_type CHECK (type IN ('cash', 'qris', 'transfer', 'ewallet'))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 2. Isi awal: 20 meja (pengganti hardcode) dan metode pembayaran -------
 INSERT INTO dining_tables (number, capacity, status) VALUES
 (1,2,'available'),(2,2,'available'),(3,2,'available'),(4,2,'available'),
 (5,2,'available'),(6,2,'available'),(7,2,'available'),(8,2,'available'),
@@ -45,26 +32,20 @@ INSERT INTO dining_tables (number, capacity, status) VALUES
 (17,6,'available'),(18,6,'available'),(19,6,'available'),(20,6,'available');
 
 INSERT INTO payment_methods (name, type, note, is_active) VALUES
-('Tunai',               'cash',     'Bayar langsung di kasir setelah makan.',            1),
-('QRIS',                'qris',     'Scan QR di kasir, lalu tunjukkan bukti pembayaran.', 1),
-('Transfer Bank BCA',   'transfer', 'No. rekening 1234567890 a.n. Resto Contoh.',         1),
-('E-Wallet (OVO/GoPay)','ewallet',  'Kirim ke 081200000001 a.n. Resto Contoh.',           1);
+('Cash',                'cash',     'Pay directly at the cashier after dining.',              1),
+('QRIS',                'qris',     'Scan the QR code at the cashier, then show proof of payment.', 1),
+('BCA Bank Transfer',   'transfer', 'Account no. 1234567890 a.n. Sample Restaurant.',      1),
+('E-Wallet (OVO/GoPay)','ewallet',  'Send to 081200000001 a.n. Sample Restaurant.',         1);
 
--- 3. users: tambah is_active ---------------------------------------------
 ALTER TABLE users
   ADD COLUMN is_active BOOLEAN NOT NULL DEFAULT TRUE,
   ADD UNIQUE KEY uq_users_email (email);
 
--- Hash Laravel berawalan $2y$; jBCrypt hanya mengenali $2a$.
--- Algoritmanya sama, jadi cukup ganti prefiks (aman untuk password ASCII),
--- akun lama tetap bisa login dengan password lamanya.
 UPDATE users SET password = CONCAT('$2a$', SUBSTRING(password, 5))
 WHERE password LIKE '$2y$%';
 
--- 4. orders: table_number -> table_id, total_price -> DECIMAL ---------------
 ALTER TABLE orders ADD COLUMN table_id INT NULL AFTER user_id;
 
--- Meja yang belum ada di dining_tables (nomor di luar 1-20) dibuat otomatis
 INSERT INTO dining_tables (number, capacity, status)
 SELECT DISTINCT o.table_number, 2, 'available'
 FROM orders o
@@ -75,7 +56,6 @@ UPDATE orders o
 JOIN dining_tables t ON t.number = o.table_number
 SET o.table_id = t.id;
 
--- Order tanpa nomor meja dipetakan ke meja 1 agar kolom bisa NOT NULL
 UPDATE orders SET table_id = (SELECT id FROM dining_tables WHERE number = 1)
 WHERE table_id IS NULL;
 
@@ -86,14 +66,12 @@ ALTER TABLE orders
     REFERENCES dining_tables (id) ON DELETE RESTRICT ON UPDATE CASCADE,
   DROP COLUMN table_number;
 
--- Seragamkan status: 'preparing' (dashboard Laravel) -> 'processing'
 UPDATE orders SET status = 'processing' WHERE status = 'preparing';
 
 ALTER TABLE orders
   ADD CONSTRAINT chk_orders_status
   CHECK (status IN ('pending', 'processing', 'ready', 'completed', 'cancelled'));
 
--- 5. payments: dibuat untuk setiap order lama (metode default: Tunai) -------
 CREATE TABLE payments (
   id                 INT           NOT NULL AUTO_INCREMENT,
   order_id           INT           NOT NULL,
@@ -119,20 +97,15 @@ SELECT o.id,
        (SELECT id FROM payment_methods WHERE type = 'cash' LIMIT 1),
        o.total_price,
        CASE o.status WHEN 'completed' THEN 'paid'
-                     WHEN 'cancelled' THEN 'failed'
-                     ELSE 'pending' END,
+                    WHEN 'cancelled' THEN 'failed'
+                    ELSE 'pending' END,
        CASE o.status WHEN 'completed' THEN o.completed_at ELSE NULL END
 FROM orders o;
 
--- 6. reviews: maksimal satu review per order ---------------------------------
--- Jika ada order dengan lebih dari satu review, baris berikut gagal:
--- hapus duplikatnya dulu, lalu jalankan ulang bagian ini.
 ALTER TABLE reviews ADD UNIQUE KEY uq_reviews_order (order_id);
 
--- 7. carts: satu baris per user per menu -------------------------------------
 ALTER TABLE carts ADD UNIQUE KEY uq_carts_user_menu (user_id, menu_id);
 
--- 8. Tabel bawaan Laravel yang tidak dipakai (hapus bila ada) --------------------
 DROP TABLE IF EXISTS sessions;
 DROP TABLE IF EXISTS cache;
 DROP TABLE IF EXISTS cache_locks;

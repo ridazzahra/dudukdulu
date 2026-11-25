@@ -10,11 +10,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 
-/**
- * Simpan gambar upload ke folder DbUtil.getUploadDir() (di luar webapp).
- * Nilai yang dikembalikan ("uploads/xxxx.jpg") disimpan di kolom image_link dan
- * ditampilkan lewat URL ${ctx}/uploads/xxxx.jpg (dilayani UploadServlet).
- */
+
 public final class ImageUploader {
 
     public static final String DEFAULT_IMAGE = "uploads/default.png";
@@ -24,32 +20,29 @@ public final class ImageUploader {
     private ImageUploader() {
     }
 
-    /** true bila form benar-benar mengirim file. */
     public static boolean hasFile(Part part) {
         return part != null && part.getSize() > 0
                 && part.getSubmittedFileName() != null && !part.getSubmittedFileName().isBlank();
     }
 
-    /** Pesan error validasi, atau null bila file layak. */
     public static String validate(Part part) throws IOException {
         if (part.getSize() > MAX_BYTES) {
-            return "Ukuran gambar maksimal 2 MB.";
+            return "Maximum image size is 2 MB.";
         }
         String ext = extension(part.getSubmittedFileName());
         if (!EXT.contains(ext)) {
-            return "Format gambar harus JPG, PNG, GIF, atau WEBP.";
+            return "Image format must be JPG, PNG, GIF, or WEBP.";
         }
         byte[] head = new byte[12];
         try (InputStream in = part.getInputStream()) {
             int n = in.readNBytes(head, 0, head.length);
             if (n < 4 || !looksLikeImage(head)) {
-                return "Isi file bukan gambar yang valid.";
+                return "File content is not a valid image.";
             }
         }
         return null;
     }
 
-    /** Simpan file (sudah divalidasi) dan kembalikan path relatif untuk kolom image_link. */
     public static String save(Part part) throws IOException {
         String ext = extension(part.getSubmittedFileName());
         String name = UUID.randomUUID().toString().replace("-", "") + "." + ext;
@@ -61,7 +54,6 @@ public final class ImageUploader {
         return "uploads/" + name;
     }
 
-    /** Hapus file lama (kecuali gambar default). Gagal hapus diabaikan. */
     public static void delete(String imageLink) {
         if (imageLink == null || imageLink.equals(DEFAULT_IMAGE) || !imageLink.startsWith("uploads/")) {
             return;
@@ -73,7 +65,6 @@ public final class ImageUploader {
         try {
             Files.deleteIfExists(DbUtil.getUploadDir().resolve(name));
         } catch (IOException ignored) {
-            // file yatim tidak fatal
         }
     }
 

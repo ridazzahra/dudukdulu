@@ -13,9 +13,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 
-/**
- * CRUD meja (admin). URL: /admin/tables, /admin/tables/create, /admin/tables/edit?id=, POST /admin/tables/delete
- */
 @WebServlet("/admin/tables/*")
 public class TableServlet extends BaseServlet {
 
@@ -97,16 +94,16 @@ public class TableServlet extends BaseServlet {
 
         Validator v = new Validator();
         if (number == null || number < 1 || number > 999) {
-            v.error("number", "Nomor meja harus angka 1-999.");
+            v.error("number", "Table number must be a number between 1 and 999.");
         }
         if (capacity == null || capacity < 1 || capacity > 50) {
-            v.error("capacity", "Kapasitas harus angka 1-50.");
+            v.error("capacity", "Capacity must be a number between 1 and 50.");
         }
         if (!DiningTable.STATUSES.containsKey(status)) {
-            v.error("status", "Status meja tidak valid.");
+            v.error("status", "Invalid table status.");
         }
         if (!v.getErrors().containsKey("number") && dao.existsNumber(t.getNumber(), id)) {
-            v.error("number", "Nomor meja " + t.getNumber() + " sudah ada.");
+            v.error("number", "Table " + t.getNumber() + " already exists.");
         }
         if (v.hasErrors()) {
             showFormWithErrors(req, resp, t, v);
@@ -119,11 +116,11 @@ public class TableServlet extends BaseServlet {
                 dao.update(t);
             }
         } catch (SQLIntegrityConstraintViolationException dup) {
-            v.error("number", "Nomor meja " + t.getNumber() + " sudah ada.");
+            v.error("number", "Table " + t.getNumber() + " already exists.");
             showFormWithErrors(req, resp, t, v);
             return;
         }
-        Flash.success(req, "Meja " + t.getNumber() + " berhasil " + (isNew ? "ditambahkan." : "diperbarui."));
+        Flash.success(req, "Table " + t.getNumber() + " has been " + (isNew ? "added." : "updated."));
         redirect(req, resp, "/admin/tables");
     }
 
@@ -138,18 +135,18 @@ public class TableServlet extends BaseServlet {
     private void delete(HttpServletRequest req, HttpServletResponse resp) throws SQLException, IOException {
         DiningTable t = dao.findById(intParam(req, "id", 0));
         if (t == null) {
-            Flash.error(req, "Meja tidak ditemukan.");
+            Flash.error(req, "Table not found.");
         } else {
             int used = dao.countOrders(t.getId());
             if (used > 0) {
-                Flash.error(req, "Meja " + t.getNumber() + " sudah dipakai " + used
-                        + " order sehingga tidak bisa dihapus. Ubah statusnya saja bila tidak dipakai lagi.");
+                Flash.error(req, "Table " + t.getNumber() + " has already been used in " + used
+                        + " orders, so it cannot be deleted. Update its status instead if it is no longer in use.");
             } else {
                 try {
                     dao.delete(t.getId());
-                    Flash.success(req, "Meja " + t.getNumber() + " berhasil dihapus.");
+                    Flash.success(req, "Table " + t.getNumber() + " has been deleted.");
                 } catch (SQLIntegrityConstraintViolationException e) {
-                    Flash.error(req, "Meja masih dipakai data lain sehingga tidak bisa dihapus.");
+                    Flash.error(req, "Table is still used by other data and cannot be deleted.");
                 }
             }
         }
@@ -157,7 +154,7 @@ public class TableServlet extends BaseServlet {
     }
 
     private void notFound(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Flash.error(req, "Meja tidak ditemukan.");
+        Flash.error(req, "Table not found.");
         redirect(req, resp, "/admin/tables");
     }
 }

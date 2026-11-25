@@ -12,10 +12,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * DAO menu. findAll(...) juga dipakai Anggota B untuk katalog customer
- * (kirim availability = Boolean.TRUE bila hanya ingin menu yang tersedia).
- */
 public class MenuDao {
 
     private static final String SELECT = "SELECT m.id, m.category_id, c.name AS category_name, m.name, "
@@ -35,7 +31,6 @@ public class MenuDao {
         return m;
     }
 
-    /** Nilai sort yang diizinkan (whitelist, bukan input mentah ke SQL). */
     private String orderBy(String sort) {
         if (sort == null) {
             return "m.name ASC";
@@ -49,14 +44,9 @@ public class MenuDao {
         }
     }
 
-    /**
-     * @param q            kata kunci nama menu (boleh null/kosong)
-     * @param categoryId   filter kategori (null = semua)
-     * @param availability true = hanya tersedia, false = hanya sold out, null = semua
-     * @param sort         name | price_asc | price_desc | newest | available
-     */
+
     public Page<Menu> findAll(String q, Integer categoryId, Boolean availability, String sort,
-                              int page, int size) throws SQLException {
+                            int page, int size) throws SQLException {
         StringBuilder where = new StringBuilder(" WHERE 1=1");
         List<Object> params = new ArrayList<>();
         if (q != null && !q.isBlank()) {
@@ -98,7 +88,6 @@ public class MenuDao {
         }
     }
 
-    /** Mengisi parameter berurutan mulai dari indeks 1; mengembalikan indeks berikutnya. */
     private int bind(PreparedStatement ps, List<Object> params) throws SQLException {
         int i = 1;
         for (Object o : params) {
@@ -109,7 +98,7 @@ public class MenuDao {
 
     public Menu findById(int id) throws SQLException {
         try (Connection c = DbUtil.getConnection();
-             PreparedStatement ps = c.prepareStatement(SELECT + " WHERE m.id = ?")) {
+            PreparedStatement ps = c.prepareStatement(SELECT + " WHERE m.id = ?")) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 return rs.next() ? map(rs) : null;
@@ -121,7 +110,7 @@ public class MenuDao {
         String sql = "INSERT INTO menus (category_id, name, description, price, image_link, is_available) "
                 + "VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection c = DbUtil.getConnection();
-             PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, m.getCategoryId());
             ps.setString(2, m.getName());
             ps.setString(3, m.getDescription());
@@ -139,7 +128,7 @@ public class MenuDao {
         String sql = "UPDATE menus SET category_id = ?, name = ?, description = ?, price = ?, "
                 + "image_link = ?, is_available = ? WHERE id = ?";
         try (Connection c = DbUtil.getConnection();
-             PreparedStatement ps = c.prepareStatement(sql)) {
+            PreparedStatement ps = c.prepareStatement(sql)) {
             ps.setInt(1, m.getCategoryId());
             ps.setString(2, m.getName());
             ps.setString(3, m.getDescription());
@@ -151,19 +140,18 @@ public class MenuDao {
         }
     }
 
-    /** Melempar SQLIntegrityConstraintViolationException bila menu sudah ada di order (FK RESTRICT). */
     public boolean delete(int id) throws SQLException {
         try (Connection c = DbUtil.getConnection();
-             PreparedStatement ps = c.prepareStatement("DELETE FROM menus WHERE id = ?")) {
+            PreparedStatement ps = c.prepareStatement("DELETE FROM menus WHERE id = ?")) {
             ps.setInt(1, id);
             return ps.executeUpdate() > 0;
         }
     }
 
-    /** Balik status tersedia <-> sold out. */
+
     public boolean toggleAvailability(int id) throws SQLException {
         try (Connection c = DbUtil.getConnection();
-             PreparedStatement ps = c.prepareStatement("UPDATE menus SET is_available = NOT is_available WHERE id = ?")) {
+            PreparedStatement ps = c.prepareStatement("UPDATE menus SET is_available = NOT is_available WHERE id = ?")) {
             ps.setInt(1, id);
             return ps.executeUpdate() > 0;
         }
@@ -171,7 +159,7 @@ public class MenuDao {
 
     public int countInOrders(int id) throws SQLException {
         try (Connection c = DbUtil.getConnection();
-             PreparedStatement ps = c.prepareStatement("SELECT COUNT(*) FROM order_items WHERE menu_id = ?")) {
+            PreparedStatement ps = c.prepareStatement("SELECT COUNT(*) FROM order_items WHERE menu_id = ?")) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 rs.next();

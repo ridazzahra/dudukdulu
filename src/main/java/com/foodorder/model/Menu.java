@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 public class Menu {
     private int id;
     private int categoryId;
-    private String categoryName; // hasil JOIN, hanya untuk tampilan
+    private String categoryName; 
     private String name;
     private String description = "";
     private BigDecimal price;

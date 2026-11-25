@@ -10,7 +10,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
-/** Memindahkan pesan flash dari session ke request (sekali tampil) agar JSP cukup memakai ${flashSuccess}/${flashError}. */
 public class FlashFilter implements Filter {
 
     @Override

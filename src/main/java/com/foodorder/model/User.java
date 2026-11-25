@@ -11,7 +11,7 @@ public class User implements Serializable {
     private int id;
     private String name;
     private String email;
-    private String password; // hash BCrypt; tidak pernah disimpan di session
+    private String password;
     private String role = ROLE_CUSTOMER;
     private String phone;
     private boolean active = true;
