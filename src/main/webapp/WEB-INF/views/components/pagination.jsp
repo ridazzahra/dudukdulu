@@ -1,7 +1,7 @@
 <%-- Shared pagination. Requires request attributes: pager (util.Page) and baseQuery (query string without "page"). --%>
 <c:if test="${pager.totalPages > 1}">
   <c:set var="qs" value="${empty baseQuery ? '' : baseQuery}${empty baseQuery ? '' : '&'}"/>
-  <nav aria-label="Halaman">
+  <nav aria-label="Pagination">
     <ul class="pagination justify-content-center mb-0">
       <li class="page-item ${pager.hasPrev ? '' : 'disabled'}">
         <a class="page-link" href="?${qs}page=${pager.page - 1}">&laquo;</a>
@@ -17,5 +17,5 @@
       </li>
     </ul>
   </nav>
-  <p class="text-center text-muted small mt-2">Total ${pager.totalItems} datas</p>
+  <p class="text-center text-muted small mt-2">Total ${pager.totalItems} items</p>
 </c:if>

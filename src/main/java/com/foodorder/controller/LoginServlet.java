@@ -58,8 +58,8 @@ public class LoginServlet extends BaseServlet {
             Auth.login(req, user);
             req.getSession().removeAttribute(Auth.AFTER_LOGIN_KEY);
 
-            boolean safeTarget = target != null && target.startsWith("/") && !target.startsWith("//")
-                    && !target.contains("\\");
+            boolean safeTarget = !user.isAdmin() && target != null && target.startsWith("/")
+                    && !target.startsWith("//") && !target.contains("\\");
             Flash.success(req, "Welcome, " + user.getName() + "!");
             redirect(req, resp, safeTarget ? target : Auth.homeFor(user));
         } catch (SQLException e) {

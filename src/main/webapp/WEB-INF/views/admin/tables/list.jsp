@@ -25,7 +25,7 @@
 
 <div class="card shadow-sm">
   <div class="table-responsive">
-    <table class="table table-hover align-middle mb-0">
+    <table class="table table-stack table-hover align-middle mb-0">
       <thead class="table-light">
         <tr><th>Table number</th><th>Capacity</th><th>Status</th><th class="text-end">Action</th></tr>
       </thead>
@@ -33,7 +33,7 @@
         <c:forEach var="t" items="${pager.items}">
           <tr>
             <td class="fw-semibold">Table ${t.number}</td>
-            <td>${t.capacity} ${t.capacity == 1 ? 'guest' : 'guests'}</td>
+            <td>${t.capacity}&nbsp;${t.capacity == 1 ? 'guest' : 'guests'}</td>
             <td>
               <span class="badge ${t.status == 'available' ? 'text-bg-success' : (t.status == 'occupied' ? 'text-bg-danger' : 'text-bg-warning')}">
                 ${t.statusLabel}

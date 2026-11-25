@@ -40,48 +40,63 @@
   </div>
 </form>
 
-<div class="card shadow-sm">
-  <div class="table-responsive">
-    <table class="table table-hover align-middle mb-0">
-      <thead class="table-light">
-        <tr><th>Menu</th><th>Category</th><th class="text-end">Price</th><th>Status</th><th class="text-end">Action</th></tr>
-      </thead>
-      <tbody>
-        <c:forEach var="m" items="${pager.items}">
-          <tr>
-            <td>
-              <div class="d-flex align-items-center gap-3">
-                <img src="${ctx}/${fn:escapeXml(m.imageLink)}" alt="" class="menu-thumb">
-                <div>
-                  <div class="fw-semibold"><c:out value="${m.name}"/></div>
-                  <div class="text-muted small"><c:out value="${m.description}"/></div>
-                </div>
+<c:if test="${pager.totalItems == 0}">
+  <div class="card shadow-sm">
+    <div class="card-body text-center text-muted py-4">No matching menu items found.</div>
+  </div>
+</c:if>
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3 align-items-start">
+  <c:forEach var="m" items="${pager.items}">
+    <div class="col">
+      <div class="card menu-card shadow-sm">
+
+        <a class="menu-card-toggle" data-bs-toggle="collapse" href="#menu-${m.id}" role="button"
+           aria-expanded="false" aria-controls="menu-${m.id}">
+          <img src="${ctx}/${fn:escapeXml(m.imageLink)}" alt=""
+               class="menu-card-img ${m.available ? '' : 'is-soldout'}">
+          <div class="d-flex justify-content-between align-items-center gap-2 p-3">
+            <div>
+              <div class="fw-semibold text-break"><c:out value="${m.name}"/></div>
+              <div class="fw-semibold" style="color: var(--color-clay)">
+                Rp <fmt:formatNumber value="${m.price}" pattern="#,##0"/>
               </div>
-            </td>
-            <td><c:out value="${m.categoryName}"/></td>
-            <td class="text-end text-nowrap">Rp <fmt:formatNumber value="${m.price}" pattern="#,##0"/></td>
-            <td>
-              <span class="badge ${m.available ? 'text-bg-success' : 'text-bg-secondary'}">${m.available ? 'Available' : 'Sold out'}</span>
-            </td>
-            <td class="text-end text-nowrap">
+            </div>
+            <div class="d-flex align-items-center gap-2 flex-shrink-0">
+              <span class="badge ${m.available ? 'text-bg-success' : 'text-bg-secondary'}">
+                ${m.available ? 'Available' : 'Sold out'}
+              </span>
+              <span class="menu-card-chevron">&#9662;</span>
+            </div>
+          </div>
+        </a>
+
+        <div class="collapse" id="menu-${m.id}">
+          <div class="p-3 border-top">
+            <div class="small text-muted">Category</div>
+            <div class="mb-2"><c:out value="${m.categoryName}"/></div>
+            <div class="small text-muted">Description</div>
+            <p class="mb-3 text-break"><c:out value="${m.description}" default="-"/></p>
+            <div class="d-flex flex-wrap gap-2">
               <form method="post" action="${ctx}/admin/menus/toggle" class="d-inline">
                 <input type="hidden" name="id" value="${m.id}">
                 <input type="hidden" name="back" value="${fn:escapeXml(backQuery)}">
-                <button type="submit" class="btn btn-sm btn-outline-secondary">${m.available ? 'Mark as sold out' : 'Mark as available'}</button>
+                <button type="submit" class="btn btn-sm btn-outline-secondary">
+                  ${m.available ? 'Mark as sold out' : 'Mark as available'}
+                </button>
               </form>
               <a href="${ctx}/admin/menus/edit?id=${m.id}" class="btn btn-sm btn-outline-primary">Change</a>
               <button type="button" class="btn btn-sm btn-outline-danger"
                       data-delete-url="${ctx}/admin/menus/delete" data-delete-id="${m.id}"
                       data-delete-name="${fn:escapeXml(m.name)}">Delete</button>
-            </td>
-          </tr>
-        </c:forEach>
-        <c:if test="${pager.totalItems == 0}">
-          <tr><td colspan="5" class="text-center text-muted py-4">No matching menu items found.</td></tr>
-        </c:if>
-      </tbody>
-    </table>
-  </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </c:forEach>
 </div>
+
 <div class="mt-3"><jsp:include page="/WEB-INF/views/components/pagination.jsp"/></div>
 <jsp:include page="/WEB-INF/views/layout/footer.jsp"/>

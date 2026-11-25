@@ -19,7 +19,7 @@
       <div class="col-lg-8">
         <div class="card shadow-sm">
           <div class="table-responsive">
-            <table class="table align-middle mb-0">
+            <table class="table table-stack align-middle mb-0">
               <thead class="table-light">
                 <tr>
                   <th>Menu</th>

@@ -74,7 +74,7 @@
     <div class="card shadow-sm h-100">
       <div class="card-header bg-white fw-semibold">Top selling menu (top 5)</div>
       <div class="table-responsive">
-        <table class="table align-middle mb-0">
+        <table class="table table-stack align-middle mb-0">
           <thead class="table-light">
             <tr><th>#</th><th>Menu</th><th class="text-end">Sold</th><th class="text-end">Revenue</th></tr>
           </thead>
