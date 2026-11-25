@@ -8,10 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-/**
- * Bagian autentikasi (Anggota A). Anggota C menambahkan findAll/update/setActive/delete
- * untuk CRUD User admin di kelas ini (atau subkelas) setelah merge.
- */
+
 public class UserDao {
 
     private static final String COLS = "id, name, email, password, role, phone, is_active";
@@ -30,7 +27,7 @@ public class UserDao {
 
     public User findByEmail(String email) throws SQLException {
         try (Connection c = DbUtil.getConnection();
-             PreparedStatement ps = c.prepareStatement("SELECT " + COLS + " FROM users WHERE email = ?")) {
+            PreparedStatement ps = c.prepareStatement("SELECT " + COLS + " FROM users WHERE email = ?")) {
             ps.setString(1, email);
             try (ResultSet rs = ps.executeQuery()) {
                 return rs.next() ? map(rs) : null;
@@ -40,7 +37,7 @@ public class UserDao {
 
     public User findById(int id) throws SQLException {
         try (Connection c = DbUtil.getConnection();
-             PreparedStatement ps = c.prepareStatement("SELECT " + COLS + " FROM users WHERE id = ?")) {
+            PreparedStatement ps = c.prepareStatement("SELECT " + COLS + " FROM users WHERE id = ?")) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 return rs.next() ? map(rs) : null;
@@ -50,7 +47,7 @@ public class UserDao {
 
     public boolean existsByEmail(String email) throws SQLException {
         try (Connection c = DbUtil.getConnection();
-             PreparedStatement ps = c.prepareStatement("SELECT 1 FROM users WHERE email = ?")) {
+            PreparedStatement ps = c.prepareStatement("SELECT 1 FROM users WHERE email = ?")) {
             ps.setString(1, email);
             try (ResultSet rs = ps.executeQuery()) {
                 return rs.next();
@@ -58,11 +55,10 @@ public class UserDao {
         }
     }
 
-    /** user.password harus sudah berupa hash BCrypt. Mengembalikan id baru. */
     public int create(User u) throws SQLException {
         String sql = "INSERT INTO users (name, email, password, role, phone, is_active) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection c = DbUtil.getConnection();
-             PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, u.getName());
             ps.setString(2, u.getEmail());
             ps.setString(3, u.getPassword());

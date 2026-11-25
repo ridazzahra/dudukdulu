@@ -13,7 +13,7 @@ public class LogoutServlet extends BaseServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Auth.logout(req);
-        Flash.success(req, "Anda sudah logout."); // membuat session baru khusus untuk pesan ini
+        Flash.success(req, "You have been signed out.");
         redirect(req, resp, "/login");
     }
 

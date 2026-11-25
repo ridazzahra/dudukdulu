@@ -14,11 +14,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 
-/**
- * Semua halaman wajib login kecuali yang publik (lihat isPublic).
- * Setiap request, data user dibaca ulang dari database supaya akun yang dinonaktifkan
- * atau diubah rolenya langsung berlaku tanpa menunggu session habis.
- */
 public class AuthFilter implements Filter {
 
     private final UserDao userDao = new UserDao();
@@ -47,19 +42,17 @@ public class AuthFilter implements Filter {
             } catch (SQLException e) {
                 throw new ServletException(e);
             }
-            // akun dihapus / dinonaktifkan saat sedang login
             Auth.logout(req);
-            Flash.error(req, "Sesi berakhir atau akun Anda tidak aktif. Silakan login kembali.");
+            Flash.error(req, "Your session has expired or your account is inactive. Please sign in again.");
             resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
 
-        // belum login: ingat halaman tujuan (GET saja) lalu arahkan ke login
         if ("GET".equals(req.getMethod())) {
             String target = path + (req.getQueryString() == null ? "" : "?" + req.getQueryString());
             req.getSession().setAttribute(Auth.AFTER_LOGIN_KEY, target);
         }
-        Flash.error(req, "Silakan login terlebih dahulu.");
+        Flash.error(req, "Please sign in first.");
         resp.sendRedirect(req.getContextPath() + "/login");
     }
 

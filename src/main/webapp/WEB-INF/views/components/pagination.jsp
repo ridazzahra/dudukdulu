@@ -1,4 +1,4 @@
-<%-- Paginasi bersama. Butuh atribut request: pager (util.Page) dan baseQuery (query string tanpa "page"). --%>
+<%-- Shared pagination. Requires request attributes: pager (util.Page) and baseQuery (query string without "page"). --%>
 <c:if test="${pager.totalPages > 1}">
   <c:set var="qs" value="${empty baseQuery ? '' : baseQuery}${empty baseQuery ? '' : '&'}"/>
   <nav aria-label="Halaman">
@@ -7,7 +7,7 @@
         <a class="page-link" href="?${qs}page=${pager.page - 1}">&laquo;</a>
       </li>
       <c:forEach begin="${pager.page - 2 < 1 ? 1 : pager.page - 2}"
-                 end="${pager.page + 2 > pager.totalPages ? pager.totalPages : pager.page + 2}" var="i">
+                end="${pager.page + 2 > pager.totalPages ? pager.totalPages : pager.page + 2}" var="i">
         <li class="page-item ${i == pager.page ? 'active' : ''}">
           <a class="page-link" href="?${qs}page=${i}">${i}</a>
         </li>
@@ -17,5 +17,5 @@
       </li>
     </ul>
   </nav>
-  <p class="text-center text-muted small mt-2">Total ${pager.totalItems} data</p>
+  <p class="text-center text-muted small mt-2">Total ${pager.totalItems} datas</p>
 </c:if>

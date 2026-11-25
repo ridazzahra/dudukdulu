@@ -2,7 +2,6 @@ package com.foodorder.util;
 
 import java.util.List;
 
-/** Hasil query berhalaman. Dipakai semua DAO: Page<Menu> p = dao.findAll(..., page, size). */
 public class Page<T> {
 
     private final List<T> items;
@@ -17,7 +16,6 @@ public class Page<T> {
         this.totalItems = totalItems;
     }
 
-    /** Hitung halaman yang valid (1..totalPages) dari permintaan user. */
     public static int clampPage(int requested, int size, long totalItems) {
         int totalPages = (int) Math.max(1, (totalItems + size - 1) / size);
         return Math.min(Math.max(requested, 1), totalPages);
