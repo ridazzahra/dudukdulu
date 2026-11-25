@@ -128,8 +128,21 @@
     <c:if test="${order.canBeReviewed}">
       <a href="${ctx}/reviews/create?orderId=${order.id}" class="btn btn-primary w-100">Write a review</a>
     </c:if>
-    <c:if test="${order.reviewed}">
-      <div class="text-center"><span class="badge text-bg-success">Reviewed</span></div>
+    <c:if test="${order.reviewed and not empty review}">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h2 class="h6 mb-2">Your review</h2>
+          <div class="mb-1">
+            <fmt:formatNumber value="${review.rating}" minFractionDigits="1" maxFractionDigits="1"/> &#9733;
+          </div>
+          <p class="mb-3 text-break"><c:out value="${review.comment}"/></p>
+          <a href="${ctx}/reviews/edit?id=${review.id}" class="btn btn-sm btn-outline-primary">Edit</a>
+          <button type="button" class="btn btn-sm btn-outline-danger"
+                  data-delete-url="${ctx}/reviews/delete"
+                  data-delete-id="${review.id}"
+                  data-delete-name="your review">Delete</button>
+        </div>
+      </div>
     </c:if>
   </div>
 </div>

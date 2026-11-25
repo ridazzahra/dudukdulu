@@ -75,6 +75,85 @@ public class ReviewDao {
         }
     }
 
+        private static Review map(ResultSet rs) throws SQLException {
+        Review r = new Review();
+        r.setId(rs.getInt("id"));
+        r.setUserId(rs.getInt("user_id"));
+        r.setOrderId(rs.getInt("order_id"));
+        r.setRating(rs.getBigDecimal("rating"));
+        r.setComment(rs.getString("comment"));
+        r.setCreatedAt(rs.getTimestamp("created_at"));
+        r.setUserName(rs.getString("name"));
+        r.setUserEmail(rs.getString("email"));
+        return r;
+    }
+
+    public Review findById(int id) throws SQLException {
+        try (Connection c = DbUtil.getConnection();
+             PreparedStatement ps = c.prepareStatement(SELECT + " WHERE r.id = ?")) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next() ? map(rs) : null;
+            }
+        }
+    }
+
+    public Review findByOrderId(int orderId) throws SQLException {
+        try (Connection c = DbUtil.getConnection();
+             PreparedStatement ps = c.prepareStatement(SELECT + " WHERE r.order_id = ?")) {
+            ps.setInt(1, orderId);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next() ? map(rs) : null;
+            }
+        }
+    }
+
+    public List<Review> findByUser(int userId) throws SQLException {
+        List<Review> list = new ArrayList<>();
+        try (Connection c = DbUtil.getConnection();
+             PreparedStatement ps = c.prepareStatement(
+                     SELECT + " WHERE r.user_id = ? ORDER BY r.created_at DESC, r.id DESC")) {
+            ps.setInt(1, userId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) list.add(map(rs));
+            }
+        }
+        return list;
+    }
+
+    public void create(Review r) throws SQLException {
+        String sql = "INSERT INTO reviews (user_id, order_id, rating, comment) VALUES (?, ?, ?, ?)";
+        try (Connection c = DbUtil.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setInt(1, r.getUserId());
+            ps.setInt(2, r.getOrderId());
+            ps.setBigDecimal(3, r.getRating());
+            ps.setString(4, r.getComment());
+            ps.executeUpdate();
+        }
+    }
+
+    public boolean update(Review r) throws SQLException {
+        String sql = "UPDATE reviews SET rating = ?, comment = ? WHERE id = ? AND user_id = ?";
+        try (Connection c = DbUtil.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setBigDecimal(1, r.getRating());
+            ps.setString(2, r.getComment());
+            ps.setInt(3, r.getId());
+            ps.setInt(4, r.getUserId());
+            return ps.executeUpdate() > 0;
+        }
+    }
+
+    public boolean deleteOwn(int id, int userId) throws SQLException {
+        try (Connection c = DbUtil.getConnection();
+             PreparedStatement ps = c.prepareStatement("DELETE FROM reviews WHERE id = ? AND user_id = ?")) {
+            ps.setInt(1, id);
+            ps.setInt(2, userId);
+            return ps.executeUpdate() > 0;
+        }
+    }
+
     private static void bind(PreparedStatement ps, List<Object> params) throws SQLException {
         for (int i = 0; i < params.size(); i++) ps.setObject(i + 1, params.get(i));
     }

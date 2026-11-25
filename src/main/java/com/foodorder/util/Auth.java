@@ -48,7 +48,6 @@ public final class Auth {
         return u == null ? 0 : u.getId();
     }
 
-    /** Halaman awal setelah login. TODO (Anggota C): ganti admin ke /admin/dashboard bila dashboard sudah jadi. */
     public static String homeFor(User u) {
         return u != null && u.isAdmin() ? "/admin/dashboard" : "/catalog";
     }

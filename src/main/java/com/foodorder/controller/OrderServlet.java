@@ -2,6 +2,7 @@ package com.foodorder.controller;
 
 import com.foodorder.dao.OrderDao;
 import com.foodorder.dao.PaymentMethodDao;
+import com.foodorder.dao.ReviewDao;
 import com.foodorder.model.Order;
 import com.foodorder.model.PaymentMethod;
 import com.foodorder.service.OrderService;
@@ -22,6 +23,7 @@ public class OrderServlet extends BaseServlet {
     private final OrderDao orderDao = new OrderDao();
     private final PaymentMethodDao methodDao = new PaymentMethodDao();
     private final OrderService orderService = new OrderService();
+    private final ReviewDao reviewDao = new ReviewDao();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -66,6 +68,9 @@ public class OrderServlet extends BaseServlet {
         PaymentMethod method = null;
         if (order.getPayment() != null) {
             method = methodDao.findById(order.getPayment().getPaymentMethodId());
+        }
+        if (order.isReviewed()) {
+            req.setAttribute("review", reviewDao.findByOrderId(order.getId()));
         }
         req.setAttribute("order", order);
         req.setAttribute("method", method);

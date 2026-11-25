@@ -47,6 +47,9 @@
                 </td>
                 <td class="text-end text-nowrap">
                   <a href="${ctx}/orders/detail?id=${o.id}" class="btn btn-sm btn-outline-primary">Detail</a>
+                  <c:if test="${o.canBeReviewed}">
+                    <a href="${ctx}/reviews/create?orderId=${o.id}" class="btn btn-sm btn-outline-success">Review</a>
+                  </c:if>
                   <c:if test="${o.canCustomerCancel}">
                     <form method="post" action="${ctx}/orders/cancel" class="d-inline"
                           onsubmit="return confirm('Cancel order #${o.id}?');">

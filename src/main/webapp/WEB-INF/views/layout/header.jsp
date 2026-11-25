@@ -34,6 +34,7 @@
           <li class="nav-item"><a class="nav-link" href="${ctx}/catalog">Catalog</a></li>
           <li class="nav-item"><a class="nav-link" href="${ctx}/cart">Cart</a></li>
           <li class="nav-item"><a class="nav-link" href="${ctx}/orders">My Orders</a></li>
+          <li class="nav-item"><a class="nav-link" href="${ctx}/reviews">My Reviews</a></li>
         </c:if>
       </ul>
       <div class="d-flex align-items-center gap-2">
