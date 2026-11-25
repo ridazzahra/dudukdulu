@@ -62,7 +62,7 @@ public class LoginServlet extends BaseServlet {
             // hanya path internal yang boleh dipakai sebagai tujuan (cegah open redirect)
             boolean safeTarget = target != null && target.startsWith("/") && !target.startsWith("//")
                     && !target.contains("\\");
-            Flash.success(req, "Selamat datang, " + user.getName() + "!");
+            Flash.success(req, "Welcome, " + user.getName() + "!");
             redirect(req, resp, safeTarget ? target : Auth.homeFor(user));
         } catch (SQLException e) {
             throw new ServletException(e);

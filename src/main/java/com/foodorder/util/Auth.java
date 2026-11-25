@@ -58,7 +58,7 @@ public final class Auth {
 
     /** Halaman awal setelah login. TODO (Anggota C): ganti admin ke /admin/dashboard bila dashboard sudah jadi. */
     public static String homeFor(User u) {
-        return u != null && u.isAdmin() ? "/admin/menus" : "/catalog";
+        return u != null && u.isAdmin() ? "/admin/dashboard" : "/catalog";
     }
 
     private static User safeCopy(User u) {

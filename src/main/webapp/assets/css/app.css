@@ -1,4 +1,96 @@
-/* Gaya tambahan sementara (Anggota C boleh mengganti seluruh isinya). */
-.menu-thumb { width: 56px; height: 56px; object-fit: cover; border-radius: .5rem; }
-.menu-preview { width: 160px; height: 160px; object-fit: cover; border-radius: .75rem; }
-.auth-card { max-width: 440px; margin: 2rem auto; }
+:root {
+    /* Colors */
+    --color-cream: #F8F4EC;
+    --color-sand: #E9DDCA;
+    --color-clay: #A65D43;
+    --color-brown: #704B38;
+    --color-espresso: #30251F;
+    --color-muted: #897C70;
+    --color-white: #FFFFFF;
+
+    /* Typography */
+    --font-heading: 'Lora', serif;
+    --font-body: 'Plus Jakarta Sans', sans-serif;
+
+    /* Shape */
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 22px;
+
+    /* Shadow */
+    --shadow-soft: 0 4px 20px rgba(48, 37, 31, 0.06);
+}
+
+/* Global */
+body {
+    font-family: var(--font-body);
+    background-color: var(--color-cream);
+    color: var(--color-espresso);
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5 {
+    font-family: var(--font-heading);
+    color: var(--color-espresso);
+    font-weight: 600;
+}
+
+p {
+    color: var(--color-muted);
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--color-clay);
+    border-color: var(--color-clay);
+    color: var(--color-white);
+    border-radius: var(--radius-sm);
+    padding: 10px 22px;
+    font-family: var(--font-body);
+    font-weight: 600;
+    transition: 0.2s ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--color-brown);
+    border-color: var(--color-brown);
+}
+
+/* Cards */
+.card {
+    background-color: var(--color-white);
+    border: 1px solid rgba(112, 75, 56, 0.08);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-soft);
+    overflow: hidden;
+}
+
+.card-title {
+    font-family: var(--font-heading);
+    color: var(--color-espresso);
+}
+
+/* Inputs */
+.form-control,
+.form-select {
+    border: 1px solid var(--color-sand);
+    border-radius: var(--radius-sm);
+    padding: 11px 14px;
+    font-family: var(--font-body);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--color-clay);
+    box-shadow: 0 0 0 3px rgba(166, 93, 67, 0.12);
+}
+
+/* Links */
+a {
+    color: var(--color-clay);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--color-brown);
+}

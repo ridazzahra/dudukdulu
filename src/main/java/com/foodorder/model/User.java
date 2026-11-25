@@ -8,6 +8,8 @@ public class User implements Serializable {
     public static final String ROLE_ADMIN = "admin";
     public static final String ROLE_CUSTOMER = "customer";
 
+    private java.util.Date createdAt;
+    
     private int id;
     private String name;
     private String email;
@@ -15,6 +17,7 @@ public class User implements Serializable {
     private String role = ROLE_CUSTOMER;
     private String phone;
     private boolean active = true;
+    private int orderCount;
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
@@ -31,4 +34,8 @@ public class User implements Serializable {
     public boolean isActive() { return active; }
     public void setActive(boolean active) { this.active = active; }
     public boolean isAdmin() { return ROLE_ADMIN.equals(role); }
+    public java.util.Date getCreatedAt() { return createdAt; }
+    public void setCreatedAt(java.util.Date createdAt) { this.createdAt = createdAt; }
+    public int getOrderCount() { return orderCount; }
+    public void setOrderCount(int orderCount) { this.orderCount = orderCount; }
 }

@@ -6,7 +6,6 @@
 
   <display-name>DudukDulu</display-name>
 
-  <!-- URUTAN FILTER PENTING (dieksekusi dari atas ke bawah). Hanya pemilik (Anggota A) yang mengubah file ini. -->
   <filter>
     <filter-name>EncodingFilter</filter-name>
     <filter-class>com.foodorder.filter.EncodingFilter</filter-class>
