@@ -13,7 +13,7 @@
         <div class="invalid-feedback">${errors.name}</div>
       </div>
       <button type="submit" class="btn btn-primary">Save</button>
-      <a href="${ctx}/admin/categories" class="btn btn-link">Cancel</a>
+      <a href="${ctx}/admin/categories" class="btn btn-outline-secondary btn-cancel">Cancel</a>
     </form>
   </div>
 </div>

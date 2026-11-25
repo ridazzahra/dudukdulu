@@ -23,7 +23,7 @@
   <div class="col-auto">
     <button type="submit" class="btn btn-primary">Search</button>
     <c:if test="${not empty q or not empty category}">
-      <a href="${ctx}/catalog" class="btn btn-link">Reset</a>
+      <a href="${ctx}/catalog" class="btn btn-outline-secondary btn-cancel">Reset</a>
     </c:if>
   </div>
 </form>

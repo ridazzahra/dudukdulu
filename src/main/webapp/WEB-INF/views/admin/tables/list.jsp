@@ -19,7 +19,7 @@
   </div>
   <div class="col-auto">
     <button type="submit" class="btn btn-outline-secondary">Filter</button>
-    <c:if test="${not empty q or not empty status}"><a href="${ctx}/admin/tables" class="btn btn-link">Reset</a></c:if>
+    <c:if test="${not empty q or not empty status}"><a href="${ctx}/admin/tables" class="btn btn-outline-secondary">Reset</a></c:if>
   </div>
 </form>
 

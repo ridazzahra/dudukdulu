@@ -1,8 +1,9 @@
 </main>
+<footer class="app-footer text-center small py-4">DudukDulu &copy; 2026 &mdash; EF234301 Web Programming</footer>
 <c:if test="${not empty sessionScope.authUser and sessionScope.authUser.admin}">
+  </div>
 </div>
 </c:if>
-<footer class="app-footer text-center small py-4">DudukDulu &copy; 2026 &mdash; EF234301 Web Programming</footer>
 <jsp:include page="/WEB-INF/views/components/confirm-delete.jsp"/>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>

@@ -9,6 +9,7 @@
   <a href="${ctx}/admin/users" class="btn btn-outline-secondary btn-sm">&laquo; Back</a>
 </div>
 
+<div class="card shadow-sm">
 <div class="table-responsive">
   <table class="table table-stack table-hover align-middle mb-0">
     <thead class="table-light">
@@ -37,6 +38,7 @@
       </c:if>
     </tbody>
   </table>
+</div>
 </div>
 
 <div class="small text-muted">Showing ${result.from}&ndash;${result.to} of ${result.total} orders</div>

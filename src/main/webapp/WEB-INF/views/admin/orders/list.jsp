@@ -36,7 +36,7 @@
   <div class="col-auto">
     <button type="submit" class="btn btn-outline-secondary">Filter</button>
     <c:if test="${not empty q or not empty status or not empty from or not empty to}">
-      <a href="${ctx}/admin/orders" class="btn btn-link">Reset</a>
+      <a href="${ctx}/admin/orders" class="btn btn-outline-secondary">Reset</a>
     </c:if>
   </div>
 </form>

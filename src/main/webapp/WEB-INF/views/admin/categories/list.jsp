@@ -11,7 +11,7 @@
   </div>
   <div class="col-auto">
     <button type="submit" class="btn btn-outline-secondary">Search</button>
-    <c:if test="${not empty q}"><a href="${ctx}/admin/categories" class="btn btn-link">Reset</a></c:if>
+    <c:if test="${not empty q}"><a href="${ctx}/admin/categories" class="btn btn-outline-secondary">Reset</a></c:if>
   </div>
 </form>
 

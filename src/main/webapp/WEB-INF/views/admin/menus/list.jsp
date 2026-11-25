@@ -35,7 +35,7 @@
   <div class="col-auto">
     <button type="submit" class="btn btn-outline-secondary">Apply</button>
     <c:if test="${not empty q or not empty category or not empty availability or not empty sort}">
-      <a href="${ctx}/admin/menus" class="btn btn-link">Reset</a>
+      <a href="${ctx}/admin/menus" class="btn btn-outline-secondary">Reset</a>
     </c:if>
   </div>
 </form>

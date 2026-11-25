@@ -32,7 +32,7 @@
         <label class="form-check-label" for="active">Active (shown in customer checkout options)</label>
       </div>
       <button type="submit" class="btn btn-primary">Save</button>
-      <a href="${ctx}/admin/payment-methods" class="btn btn-link">Cancel</a>
+      <a href="${ctx}/admin/payment-methods" class="btn btn-outline-secondary btn-cancel">Cancel</a>
     </form>
   </div>
 </div>

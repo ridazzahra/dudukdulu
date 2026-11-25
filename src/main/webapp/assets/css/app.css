@@ -121,7 +121,7 @@ a:hover {
 
 .app-shell {
     display: flex;
-    min-height: calc(100vh - 130px);
+    min-height: calc(100vh - 66px);
 }
 .app-sidebar {
     flex-shrink: 0;
@@ -303,4 +303,22 @@ a:hover {
         padding: 0;
         border: 0;
     }
+}
+
+@media (min-width: 768px) {
+    .table > :not(caption) > * > :first-child {
+        padding-left: 28px;
+    }
+    .table > :not(caption) > * > :last-child {
+        padding-right: 28px;
+    }
+}
+
+.btn-cancel {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 22px;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
 }

@@ -20,17 +20,18 @@
   </div>
   <div class="col-6 col-md-2">
     <select name="status" class="form-select" aria-label="Filter by status">
-      <option value="">All statuses</option>
+      <option value="">All status</option>
       <option value="active" ${status == 'active' ? 'selected' : ''}>Active</option>
       <option value="inactive" ${status == 'inactive' ? 'selected' : ''}>Inactive</option>
     </select>
   </div>
   <div class="col-12 col-md-3 d-flex gap-2">
     <button class="btn btn-outline-primary flex-fill" type="submit">Search</button>
-    <a href="${ctx}/admin/users" class="btn btn-outline-secondary flex-fill">Reset</a>
+    <a href="${ctx}/admin/users" class="btn btn-outline-secondary flex-fill d-flex align-items-center justify-content-center">Reset</a>
   </div>
 </form>
 
+<div class="card shadow-sm">
 <div class="table-responsive">
   <table class="table table-stack table-hover align-middle mb-0">
     <thead class="table-light">
@@ -77,6 +78,7 @@
       </c:if>
     </tbody>
   </table>
+</div>
 </div>
 
 <div class="small text-muted">Showing ${result.from}&ndash;${result.to} of ${result.total} users</div>

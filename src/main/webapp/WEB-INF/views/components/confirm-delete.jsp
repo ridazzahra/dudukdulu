@@ -15,7 +15,7 @@
         Are you sure you want to delete <strong id="confirmDeleteName"></strong>? This action cannot be undone.
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
         <button type="submit" class="btn btn-danger">Yes, delete</button>
       </div>
     </form>

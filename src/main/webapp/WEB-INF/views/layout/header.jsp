@@ -93,7 +93,8 @@
       </div>
     </div>
   </aside>
-  <main class="app-main px-3 px-lg-4 py-4">
+  <div class="app-main d-flex flex-column">
+  <main class="flex-grow-1 px-3 px-lg-4 py-4">
   </c:when>
   <c:otherwise>
 <main class="container py-4">
