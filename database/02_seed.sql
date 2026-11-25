@@ -12,18 +12,18 @@ INSERT INTO categories (id, name) VALUES
 (4, 'Dessert');
 
 INSERT INTO menus (id, category_id, name, description, price, image_link, is_available) VALUES
-(1,  1, 'Special Fried Rice', 'Fried rice with egg, shredded chicken, and pickles.',   25000.00, 'uploads/default.png', 1),
-(2,  1, 'Chicken Noodle Meatball', 'Chicken noodles with beef meatballs and fried wonton.', 22000.00, 'uploads/default.png', 1),
-(3,  1, 'Honey Grilled Chicken', 'Grilled chicken in honey glaze with fresh veggies and chili paste.', 30000.00, 'uploads/default.png', 1),
-(4,  1, 'Chicken Satay', 'Ten skewers of chicken satay with peanut sauce.', 28000.00, 'uploads/default.png', 1),
-(5,  2, 'French Fries', 'Crispy french fries with chili sauce.', 15000.00, 'uploads/default.png', 1),
-(6,  2, 'Fried Banana', 'Crispy battered fried banana with cheese topping.', 12000.00, 'uploads/default.png', 1),
-(7,  2, 'Crispy Tofu', 'Crispy battered tofu with chili salt.', 13000.00, 'uploads/default.png', 1),
-(8,  3, 'Sweet Iced Tea', 'Refreshing cold sweet tea.', 6000.00, 'uploads/default.png', 1),
-(9,  3, 'Iced Orange', 'Freshly squeezed orange with ice cubes.', 8000.00, 'uploads/default.png', 1),
-(10, 3, 'Iced Palm Sugar Milk Coffee', 'Iced coffee with milk and palm sugar.', 15000.00, 'uploads/default.png', 1),
-(11, 4, 'Vanilla Ice Cream', 'Two scoops of vanilla ice cream.', 12000.00, 'uploads/default.png', 1),
-(12, 4, 'Chocolate Pudding', 'Soft chocolate pudding with vanilla custard (sold out example).', 10000.00, 'uploads/default.png', 0);
+(1,  1, 'Special Fried Rice', 'Fried rice with egg, shredded chicken, and pickles.',   25000.00, 'assets/img/menu/special-fried-rice.jpg', 1),
+(2,  1, 'Chicken Noodle Meatball', 'Chicken noodles with beef meatballs and fried wonton.', 22000.00, 'assets/img/menu/chicken-noodle-meatball.jpg', 1),
+(3,  1, 'Honey Grilled Chicken', 'Grilled chicken in honey glaze with fresh veggies and chili paste.', 30000.00, 'assets/img/menu/honey-grilled-chicken.jpg', 1),
+(4,  1, 'Chicken Satay', 'Ten skewers of chicken satay with peanut sauce.', 28000.00, 'assets/img/menu/chicken-satay.jpg', 1),
+(5,  2, 'French Fries', 'Crispy french fries with chili sauce.', 15000.00, 'assets/img/menu/french-fries.jpg', 1),
+(6,  2, 'Fried Banana', 'Crispy battered fried banana with cheese topping.', 12000.00, 'assets/img/menu/fried-banana.jpg', 1),
+(7,  2, 'Crispy Tofu', 'Crispy battered tofu with chili salt.', 13000.00, 'assets/img/menu/crispy-tofu.jpg', 1),
+(8,  3, 'Sweet Iced Tea', 'Refreshing cold sweet tea.', 6000.00, 'assets/img/menu/sweet-iced-tea.jpg', 1),
+(9,  3, 'Iced Orange', 'Freshly squeezed orange with ice cubes.', 8000.00, 'assets/img/menu/iced-orange.jpg', 1),
+(10, 3, 'Iced Palm Sugar Milk Coffee', 'Iced coffee with milk and palm sugar.', 15000.00, 'assets/img/menu/iced-palm-sugar-coffee.jpg', 1),
+(11, 4, 'Vanilla Ice Cream', 'Two scoops of vanilla ice cream.', 12000.00, 'assets/img/menu/vanilla-ice-cream.jpg', 1),
+(12, 4, 'Chocolate Pudding', 'Soft chocolate pudding with vanilla custard.', 10000.00, 'assets/img/menu/chocolate-pudding.jpg', 0);
 
 INSERT INTO dining_tables (id, number, capacity, status) VALUES
 (1,  1,  2, 'occupied'),
