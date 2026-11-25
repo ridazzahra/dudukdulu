@@ -2,13 +2,7 @@ package com.foodorder.util;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-/**
- * Pesan sukses/error satu kali tampil (satu utilitas untuk seluruh tim).
- *
- * Sebelum redirect  : Flash.success(req, "Tersimpan.");  Flash.error(req, "Gagal.");
- * Tanpa redirect    : Flash.successNow(req, ...) / Flash.errorNow(req, ...)  (untuk forward)
- * Di JSP            : ${flashSuccess} dan ${flashError} (sudah ditampilkan oleh layout/header.jsp)
- */
+
 public final class Flash {
 
     public static final String SUCCESS = "flash_success";

@@ -37,19 +37,19 @@ public class RegisterServlet extends BaseServlet {
         String confirm = req.getParameter("confirm") == null ? "" : req.getParameter("confirm");
 
         Validator v = new Validator()
-                .required("name", name, "Nama").maxLength("name", name, 255, "Nama")
+                .required("name", name, "Name").maxLength("name", name, 255, "Name")
                 .required("email", email, "Email").maxLength("email", email, 255, "Email").email("email", email)
-                .required("phone", phone, "Nomor HP")
-                .matches("phone", phone, "^\\+?[0-9]{8,15}$", "Nomor HP harus 8-15 digit angka.")
+                .required("phone", phone, "Phone number")
+                .matches("phone", phone, "^\\+?[0-9]{8,15}$", "Phone number must be 8-15 digits.")
                 .required("password", password, "Password").minLength("password", password, 8, "Password")
                 .maxLength("password", password, 72, "Password");
         if (!password.isEmpty() && !password.equals(confirm)) {
-            v.error("confirm", "Konfirmasi password tidak sama.");
+            v.error("confirm", "Passwords do not match.");
         }
 
         try {
             if (!v.getErrors().containsKey("email") && userDao.existsByEmail(email)) {
-                v.error("email", "Email sudah terdaftar.");
+                v.error("email", "Email is already registered.");
             }
             if (v.hasErrors()) {
                 req.setAttribute("errors", v.getErrors());
@@ -65,12 +65,12 @@ public class RegisterServlet extends BaseServlet {
             u.setEmail(email);
             u.setPhone(phone);
             u.setPassword(PasswordUtil.hash(password));
-            u.setRole(User.ROLE_CUSTOMER); // pendaftaran publik selalu customer
+            u.setRole(User.ROLE_CUSTOMER);
             u.setActive(true);
             try {
                 userDao.create(u);
-            } catch (SQLIntegrityConstraintViolationException dup) { // balapan dua pendaftaran email sama
-                v.error("email", "Email sudah terdaftar.");
+            } catch (SQLIntegrityConstraintViolationException dup) {
+                v.error("email", "Email is already registered.");
                 req.setAttribute("errors", v.getErrors());
                 req.setAttribute("name", name);
                 req.setAttribute("email", email);
@@ -78,7 +78,7 @@ public class RegisterServlet extends BaseServlet {
                 forward(req, resp, "auth/register");
                 return;
             }
-            Flash.success(req, "Pendaftaran berhasil. Silakan login.");
+            Flash.success(req, "Registration successful. Please sign in.");
             redirect(req, resp, "/login");
         } catch (SQLException e) {
             throw new ServletException(e);

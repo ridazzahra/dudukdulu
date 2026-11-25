@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -33,7 +33,7 @@
         <c:if test="${not empty sessionScope.authUser and not sessionScope.authUser.admin}">
           <li class="nav-item"><a class="nav-link" href="${ctx}/catalog">Catalog</a></li>
           <li class="nav-item"><a class="nav-link" href="${ctx}/cart">Cart</a></li>
-          <li class="nav-item"><a class="nav-link" href="${ctx}/orders">Order</a></li>
+          <li class="nav-item"><a class="nav-link" href="${ctx}/orders">My Orders</a></li>
         </c:if>
       </ul>
       <div class="d-flex align-items-center gap-2">
@@ -57,12 +57,12 @@
 <c:if test="${not empty flashSuccess}">
   <div class="alert alert-success alert-dismissible fade show" role="alert">
     <c:out value="${flashSuccess}"/>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
 </c:if>
 <c:if test="${not empty flashError}">
   <div class="alert alert-danger alert-dismissible fade show" role="alert">
     <c:out value="${flashError}"/>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
 </c:if>

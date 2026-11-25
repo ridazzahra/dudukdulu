@@ -4,12 +4,6 @@ import com.foodorder.model.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
-/**
- * Akses user yang sedang login. KONTRAK UNTUK ANGGOTA B & C:
- *   Java : User u = Auth.currentUser(req);   int id = Auth.userId(req);   Auth.isAdmin(req)
- *   JSP  : ${sessionScope.authUser.name}  ${sessionScope.authUser.role}  ${sessionScope.authUser.admin}
- * Objek User di session TIDAK berisi hash password.
- */
 public final class Auth {
 
     public static final String SESSION_KEY = "authUser";
@@ -20,11 +14,10 @@ public final class Auth {
 
     public static void login(HttpServletRequest req, User user) {
         req.getSession(true);
-        req.changeSessionId(); // cegah session fixation
+        req.changeSessionId(); 
         req.getSession().setAttribute(SESSION_KEY, safeCopy(user));
     }
 
-    /** Segarkan data user di session (dipanggil AuthFilter agar perubahan role/nonaktif langsung berlaku). */
     public static void refresh(HttpServletRequest req, User user) {
         req.getSession().setAttribute(SESSION_KEY, safeCopy(user));
     }
@@ -50,7 +43,6 @@ public final class Auth {
         return u != null && u.isAdmin();
     }
 
-    /** ID user login, atau 0 bila belum login. */
     public static int userId(HttpServletRequest req) {
         User u = currentUser(req);
         return u == null ? 0 : u.getId();
@@ -69,6 +61,6 @@ public final class Auth {
         c.setRole(u.getRole());
         c.setPhone(u.getPhone());
         c.setActive(u.isActive());
-        return c; // password sengaja tidak disalin
+        return c; 
     }
 }

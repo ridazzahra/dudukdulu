@@ -8,12 +8,11 @@ public class DiningTable {
     public static final String OCCUPIED = "occupied";
     public static final String RESERVED = "reserved";
 
-    /** kode status -> label tampilan (urutan tetap). */
     public static final Map<String, String> STATUSES = new LinkedHashMap<>();
     static {
-        STATUSES.put(AVAILABLE, "Tersedia");
-        STATUSES.put(OCCUPIED, "Terisi");
-        STATUSES.put(RESERVED, "Dipesan");
+        STATUSES.put(AVAILABLE, "Available");
+        STATUSES.put(OCCUPIED, "Occupied");
+        STATUSES.put(RESERVED, "Reserved");
     }
 
     private int id;

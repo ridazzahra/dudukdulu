@@ -13,13 +13,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 
-/**
- * CRUD kategori (admin).
- * GET  /admin/categories            daftar (?q=&page=)
- * GET  /admin/categories/create     form baru        POST /admin/categories/create   simpan
- * GET  /admin/categories/edit?id=   form ubah        POST /admin/categories/edit     simpan
- * POST /admin/categories/delete     hapus (id)
- */
+
 @WebServlet("/admin/categories/*")
 public class CategoryServlet extends BaseServlet {
 
@@ -87,10 +81,10 @@ public class CategoryServlet extends BaseServlet {
         c.setName(Validator.trim(req.getParameter("name")));
 
         Validator v = new Validator()
-                .required("name", c.getName(), "Nama kategori")
-                .maxLength("name", c.getName(), 255, "Nama kategori");
+                .required("name", c.getName(), "Category's name")
+                .maxLength("name", c.getName(), 255, "Category's name");
         if (!v.hasErrors() && dao.existsByName(c.getName(), id)) {
-            v.error("name", "Nama kategori sudah dipakai.");
+            v.error("name", "Category name is already taken.");
         }
         if (v.hasErrors()) {
             showFormWithErrors(req, resp, c, v);
@@ -103,11 +97,11 @@ public class CategoryServlet extends BaseServlet {
                 dao.update(c);
             }
         } catch (SQLIntegrityConstraintViolationException dup) {
-            v.error("name", "Nama kategori sudah dipakai.");
+            v.error("name", "Category name is already taken.");
             showFormWithErrors(req, resp, c, v);
             return;
         }
-        Flash.success(req, "Kategori \"" + c.getName() + "\" berhasil " + (isNew ? "ditambahkan." : "diperbarui."));
+        Flash.success(req, "Category \"" + c.getName() + "\" has been " + (isNew ? "added." : "updated."));
         redirect(req, resp, "/admin/categories");
     }
 
@@ -122,18 +116,18 @@ public class CategoryServlet extends BaseServlet {
         int id = intParam(req, "id", 0);
         Category c = dao.findById(id);
         if (c == null) {
-            Flash.error(req, "Kategori tidak ditemukan.");
+            Flash.error(req, "Category not found.");
         } else {
             int used = dao.countMenus(id);
             if (used > 0) {
-                Flash.error(req, "Kategori \"" + c.getName() + "\" masih dipakai " + used
-                        + " menu, jadi tidak bisa dihapus. Pindahkan atau hapus menunya dulu.");
+                Flash.error(req, "Category \"" + c.getName() + "\" is still used by " + used
+                        + " menu items, so it cannot be deleted. Move or delete the menu items first.");
             } else {
                 try {
                     dao.delete(id);
-                    Flash.success(req, "Kategori \"" + c.getName() + "\" berhasil dihapus.");
+                    Flash.success(req, "Category \"" + c.getName() + "\" has been deleted.");
                 } catch (SQLIntegrityConstraintViolationException e) {
-                    Flash.error(req, "Kategori masih dipakai data lain sehingga tidak bisa dihapus.");
+                    Flash.error(req, "Category is still in use by other data and cannot be deleted.");
                 }
             }
         }
@@ -141,7 +135,7 @@ public class CategoryServlet extends BaseServlet {
     }
 
     private void notFound(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Flash.error(req, "Kategori tidak ditemukan.");
+        Flash.error(req, "Category not found.");
         redirect(req, resp, "/admin/categories");
     }
 }

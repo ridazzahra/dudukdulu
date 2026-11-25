@@ -7,7 +7,6 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import java.io.IOException;
 
-/** Paksa UTF-8 untuk request & response (agar karakter Indonesia/emoji aman). Didaftarkan di web.xml. */
 public class EncodingFilter implements Filter {
 
     @Override
