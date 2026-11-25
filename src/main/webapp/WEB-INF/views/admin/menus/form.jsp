@@ -54,7 +54,7 @@
       </div>
       <div class="mt-4">
         <button type="submit" class="btn btn-primary">Save</button>
-        <a href="${ctx}/admin/menus" class="btn btn-outline-secondary btn-cancel">Cancel</a>
+        <a href="${ctx}/admin/menus" class="btn btn-outline-secondary">Cancel</a>
       </div>
     </form>
   </div>

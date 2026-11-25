@@ -36,7 +36,7 @@
       </div>
 
       <button type="submit" class="btn btn-primary">Save</button>
-      <a href="${ctx}/orders/detail?id=${review.orderId}" class="btn btn-outline-secondary btn-cancel">Cancel</a>
+      <a href="${ctx}/orders/detail?id=${review.orderId}" class="btn btn-outline-secondary ">Cancel</a>
     </form>
   </div>
 </div>
