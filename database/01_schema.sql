@@ -1,10 +1,3 @@
--- =====================================================================
--- 01_schema.sql  |  Food Order (JSP)  |  Skema final, 10 tabel
--- Jalankan di database KOSONG / baru. Script ini menghapus tabel lama.
--- Ganti nama database di bawah jika berbeda dengan konfigurasi tim.
--- Kompatibel: MySQL 8.0.16+ dan MariaDB 10.2+ (CHECK constraint aktif).
--- =====================================================================
-
 CREATE DATABASE IF NOT EXISTS food_order
   CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE food_order;
@@ -22,11 +15,6 @@ DROP TABLE IF EXISTS dining_tables;
 DROP TABLE IF EXISTS users;
 SET FOREIGN_KEY_CHECKS = 1;
 
--- ---------------------------------------------------------------------
--- users
--- role: 'admin' | 'customer'. password: hash BCrypt ($2a$...).
--- is_active = 0 -> akun dinonaktifkan (tidak bisa login).
--- ---------------------------------------------------------------------
 CREATE TABLE users (
   id         INT          NOT NULL AUTO_INCREMENT,
   name       VARCHAR(255) NOT NULL,
@@ -40,9 +28,6 @@ CREATE TABLE users (
   CONSTRAINT chk_users_role CHECK (role IN ('admin', 'customer'))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ---------------------------------------------------------------------
--- categories
--- ---------------------------------------------------------------------
 CREATE TABLE categories (
   id    INT          NOT NULL AUTO_INCREMENT,
   name  VARCHAR(255) NOT NULL,
@@ -50,10 +35,6 @@ CREATE TABLE categories (
   UNIQUE KEY uq_categories_name (name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ---------------------------------------------------------------------
--- menus
--- Kategori tidak boleh dihapus jika masih dipakai menu (ON DELETE RESTRICT).
--- ---------------------------------------------------------------------
 CREATE TABLE menus (
   id            INT           NOT NULL AUTO_INCREMENT,
   category_id   INT           NOT NULL,
@@ -70,10 +51,6 @@ CREATE TABLE menus (
   CONSTRAINT chk_menus_price CHECK (price >= 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ---------------------------------------------------------------------
--- dining_tables  (BARU) - menggantikan hardcode 20 meja di checkout
--- status: 'available' | 'occupied' | 'reserved'
--- ---------------------------------------------------------------------
 CREATE TABLE dining_tables (
   id        INT         NOT NULL AUTO_INCREMENT,
   number    INT         NOT NULL,
@@ -85,11 +62,6 @@ CREATE TABLE dining_tables (
   CONSTRAINT chk_tables_status CHECK (status IN ('available', 'occupied', 'reserved'))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ---------------------------------------------------------------------
--- payment_methods  (BARU)
--- type: 'cash' | 'qris' | 'transfer' | 'ewallet'
--- note: instruksi pembayaran / nomor rekening / nomor e-wallet
--- ---------------------------------------------------------------------
 CREATE TABLE payment_methods (
   id         INT          NOT NULL AUTO_INCREMENT,
   name       VARCHAR(50)  NOT NULL,
@@ -101,9 +73,6 @@ CREATE TABLE payment_methods (
   CONSTRAINT chk_pm_type CHECK (type IN ('cash', 'qris', 'transfer', 'ewallet'))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ---------------------------------------------------------------------
--- carts  (satu baris per user per menu)
--- ---------------------------------------------------------------------
 CREATE TABLE carts (
   id        INT NOT NULL AUTO_INCREMENT,
   user_id   INT NOT NULL,
@@ -119,12 +88,6 @@ CREATE TABLE carts (
   CONSTRAINT chk_carts_qty CHECK (quantity > 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ---------------------------------------------------------------------
--- orders
--- status: 'pending' | 'processing' | 'ready' | 'completed' | 'cancelled'
--- table_id menggantikan kolom lama table_number.
--- User yang sudah punya order tidak bisa dihapus (RESTRICT) -> nonaktifkan saja.
--- ---------------------------------------------------------------------
 CREATE TABLE orders (
   id            INT           NOT NULL AUTO_INCREMENT,
   user_id       INT           NOT NULL,
@@ -148,10 +111,6 @@ CREATE TABLE orders (
   CONSTRAINT chk_orders_status CHECK (status IN ('pending', 'processing', 'ready', 'completed', 'cancelled'))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ---------------------------------------------------------------------
--- order_items  (price = snapshot harga saat checkout)
--- Menu yang sudah ada di order tidak bisa dihapus (RESTRICT).
--- ---------------------------------------------------------------------
 CREATE TABLE order_items (
   id        INT           NOT NULL AUTO_INCREMENT,
   order_id  INT           NOT NULL,
@@ -169,11 +128,6 @@ CREATE TABLE order_items (
   CONSTRAINT chk_order_items_price CHECK (price >= 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ---------------------------------------------------------------------
--- payments  (BARU) - relasi 1:1 dengan orders (order_id UNIQUE)
--- status: 'pending' | 'paid' | 'failed'
--- Jika nanti diputuskan 1:N (bisa bayar ulang), hapus UNIQUE uq_payments_order.
--- ---------------------------------------------------------------------
 CREATE TABLE payments (
   id                 INT           NOT NULL AUTO_INCREMENT,
   order_id           INT           NOT NULL,
@@ -194,9 +148,6 @@ CREATE TABLE payments (
   CONSTRAINT chk_payments_status CHECK (status IN ('pending', 'paid', 'failed'))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ---------------------------------------------------------------------
--- reviews  (maksimal satu review per order -> order_id UNIQUE)
--- ---------------------------------------------------------------------
 CREATE TABLE reviews (
   id          INT          NOT NULL AUTO_INCREMENT,
   user_id     INT          NOT NULL,
