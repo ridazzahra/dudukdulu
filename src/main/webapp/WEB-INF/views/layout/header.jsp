@@ -15,7 +15,7 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-lg app-navbar">
-  <div class="${isAdmin ? 'container-fluid px-3' : 'container'}">
+  <div class="container">
 
     <c:if test="${isAdmin}">
       <button class="navbar-toggler d-lg-none me-2" type="button" data-bs-toggle="offcanvas"

@@ -324,3 +324,12 @@ a:hover {
     border-radius: var(--radius-sm);
     font-weight: 600;
 }
+
+.btn:not(.btn-sm) .badge {
+    top: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+}
